@@ -6,10 +6,6 @@ services:
     image: schmelczera/fizika
     networks:
       - network
-    ports:
-      - target: 80
-        protocol: tcp
-        mode: ingress
     deploy:
       replicas: 1
       resources:
