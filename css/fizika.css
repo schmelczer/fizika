@@ -1,0 +1,268 @@
+ body { 
+    font-size: 1em;
+    text-align: center;
+    color: #003366;
+    background-image: url("../auxIMG/bg.jpg");
+    background-color: #fff;
+    background-repeat: repeat;
+    word-wrap: break-word;
+    margin-bottom: 1em;
+}
+::-moz-selection { 
+     background: #003366;
+     color: #fff;
+     text-shadow: none;
+}
+::selection {
+    background: #003366;
+    color: #fff;
+    text-shadow: none;
+}
+h1:hover {
+    text-shadow: 0.3px 0.3px #002D5B, 
+                 0.6px 0.6px #002851, 
+                   1px   1px #002347,
+                 1.3px 1.3px #001E3D, 
+                 1.6px 1.6px #001933, 
+                   2px   2px #001326, 
+                 2.3px 2.3px #000E1C, 
+                 2.6px 2.6px #000A14, 
+                   3px   3px #00070F,
+                 3.3px 3.3px #00050A, 
+                 3.6px 3.6px #000205, 
+                   4px   4px #000000;
+}
+h1 { 
+    font-family: "Poiret One", "Montserrat", serif;
+    font-size: 5em;
+    text-align: center;
+    margin: 0.2em 0 0.3em 0;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    display: inline;
+    transition: all 0.6s ease-out;
+}
+#titlebox {
+    padding-bottom: 0.5em;
+}
+hr { 
+    border-bottom: 2px solid #003366;
+    width: 35%;
+}
+.menu { 
+    text-align: center;
+    width: 100%;
+    margin: auto;
+    font-weight: 400;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+ul { 
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+li {
+    font-family: "Roboto", serif;
+    font-weight: 300;
+    display: inline-block;
+    padding: 0.5em 1em;
+    font-size: 1.5em;
+}
+li:hover {
+    cursor: pointer;
+    text-shadow: 1px 1px 1px #0A0F14;
+}
+#wrapper {
+    width: 75%;
+    margin: auto;
+    padding-top: 0.5em;
+}
+#bfooldal { 
+    font-weight: 700;
+}
+.szoveg, #buttonwrapper {
+    width: 80%;
+    margin: auto;
+}
+p:first-of-type {
+    padding-top: 2em;
+}
+p { 
+    font-family: "Open sans", sans-serif;
+    font-weight: 300;
+    font-size: 1.3em;
+    color: #0A0F14;
+    text-align: justify;
+    margin: auto;
+    padding: 0.5em 0;
+}
+p:last-of-type {
+    padding-bottom: 2em;
+}
+.buttonwrapper { 
+    text-align: center;
+}
+#teszt, #eredmenyek, #kereses, #temakor {
+    display: none;
+}
+#temak {
+    width: 100%;
+    display: flex;
+    text-align: left;
+}
+.fele {
+    width: 40%;
+    display: block;
+}
+#bal {
+    float: left;
+    margin-left: 20%;
+}
+#jobb {
+    float: right;
+}
+.negyzet {
+    margin-left: 1.5em;
+    font-family: "Open sans", sans-serif;
+    font-weight: 400;
+}
+.main {
+    font-size: 1.5em;
+    margin-left: 0;
+    font-family: "Roboto", serif;
+}
+#numberof { 
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    font-size: 1.2em;
+    font-weight: 300;
+    background-color: white;
+    width: 63%;
+}
+.f2006, .f2016 { 
+    display: none;
+}
+#load, #loadingGif { 
+    display: none;
+}
+#loading {
+    width: 100%;
+    text-align: center;
+    height: auto;
+}
+#loadingGif {
+    float: none;
+    margin: auto;
+    padding-bottom: 2em;
+}
+#megoldas {
+    display: none;
+}
+#percentage {  
+    font-family: "Poiret One", "Montserrat", serif;
+    font-size: 3em;
+    text-align: center;
+}
+#state, #state2 {
+    font-weight: 300;
+    font-size: 2em;
+    text-align: center;
+    padding: 0.6em;
+}
+#content {
+    margin: auto;
+}
+select { 
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    font-size: 1.25em;
+    color: #0A0F14;
+    width: 26%;
+    padding: 12px 20px 12px 40px;
+    background-color: #fff;
+}
+
+table {
+    border-collapse: collapse;
+    margin : auto;
+    width: 100%;
+} 
+th, td { 
+    text-align: left;
+    padding: 0.5em;
+}
+tr:nth-child(even){ 
+    background-color: #f2f2f2;
+}
+th { 
+    background-color: #003366;
+    color: white;
+}
+
+h4 { 
+    margin: auto;
+    font-size: 0.75em;
+}
+
+@media only screen and (max-width: 1000px){
+    body { 
+        font-size: 1.75em;
+     }
+    h1 {
+        font-size: 7em;
+     }
+    h1:hover {
+        text-shadow: none;
+    }
+    #wrapper { 
+        width: 90%;
+     }
+    .szoveg {
+        width: 90%;
+     }
+    #numberof { 
+        font-size: 0.6em;
+     }
+    img { 
+        max-width: 500px;
+     }
+    select { 
+     font-size: 0.8em;
+     width: 30%;
+    }
+    hr { 
+     border-bottom-width: 4px;
+     width: 50%;
+    }
+    li {
+        font-size: 1.75em;
+        padding: 0.25em;
+    }
+    p {
+        font-size: 0.75em;
+    }
+    p:first-of-type {
+        padding-top: 0.5em;
+    }
+    p:last-of-type {
+        padding-bottom: 0.5em;
+    }
+
+    #tablazat { 
+        font-size: 0.8em;
+    }
+    .mbcheck { 
+        font-size: 0.75em;
+    }
+    #bal {
+        margin-left: 0;
+    }
+}
+ 

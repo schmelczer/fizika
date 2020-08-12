@@ -1,0 +1,44 @@
+#preload {
+	display: none;
+}
+
+input[type=radio] { 
+    cursor: pointer;
+}
+input[type=radio] {
+    width: 28px;
+    margin: 0;
+    padding: 0;
+    opacity: 0;
+}
+input[type=radio] + label { 
+    display: inline;
+    font-family: "Open Sans", sans-serif;
+    font-weight: 300;
+    font-size: 1.3em;
+    margin-left: -28px;
+    padding-left: 28px;
+    background: url('../auxIMG/unchecked.svg') no-repeat 0 50%;
+    line-height: 35px;
+    background-size: 28px 28px;
+    margin-bottom: 6.25em;
+}
+input[type=radio]:checked + label { 
+    background: url('../auxIMG/checked.svg') no-repeat 0 50%;
+    background-size: 28px 28px;
+}
+
+@media only screen and (max-width: 1000px){
+    input[type=radio] {
+    	width: 60px;
+     	height: 60px;
+    }
+    input[type=radio] + label { 
+    	margin-left: -60px;
+     	padding-left: 60px;
+     	background-size: 60px 60px;
+    }
+    input[type=radio]:checked + label {
+    	background-size: 60px 60px;
+    }
+}
