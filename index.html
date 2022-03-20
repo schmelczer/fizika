@@ -1,222 +1,329 @@
 <!DOCTYPE html>
 <html lang="hu-HU">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
 
     <title>Fizika érettségire felkészítő alkalmazás - EMELT szint -</title>
-    <meta name="description"
-          content="Itt mindent megtalálsz, ami az emelt szintű fizika írásbeli érettségi teszt részének gyakorlásához szükséges. Gyakorló alkalmazás, eredmények visszatekintése. Ha bármiben elakadtál, nyugodtan írhatsz, és megoldjuk a problémádat."/>
+    <meta
+      name="description"
+      content="Itt mindent megtalálsz, ami az emelt szintű fizika írásbeli érettségi teszt részének gyakorlásához szükséges. Gyakorló alkalmazás, eredmények visszatekintése. Ha bármiben elakadtál, nyugodtan írhatsz, és megoldjuk a problémádat."
+    />
 
-    <meta name="keywords"
-          content="fizika, érettségi, emelt, alkalmazás, gyakorlás, schmelczer, andrás, babits, pte, gyakorló, 2017, 2016, teszt, egyedi, egyéni, eredmények, megoldások, letöltés, ingyenes, erettsegi, alkalmazas, gyakorlas, gyakorlo, elmult, elmúlt, évek, evek, új, uj, andras, ofi"/>
-    <meta name="author" content="Schmelczer András">
-    <meta name="revisit-after" content="7 days">
+    <meta
+      name="keywords"
+      content="fizika, érettségi, emelt, alkalmazás, gyakorlás, schmelczer, andrás, babits, pte, gyakorló, 2017, 2016, teszt, egyedi, egyéni, eredmények, megoldások, letöltés, ingyenes, erettsegi, alkalmazas, gyakorlas, gyakorlo, elmult, elmúlt, évek, evek, új, uj, andras, ofi"
+    />
+    <meta name="author" content="Schmelczer András" />
+    <meta name="revisit-after" content="7 days" />
 
-    <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#003366">
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#003366" />
 
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400|Roboto:300,400&amp;subset=latin-ext"
-          rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Poiret+One&subset=latin-ext" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css?family=Open+Sans:300,400|Roboto:300,400&amp;subset=latin-ext"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Poiret+One&subset=latin-ext"
+      rel="stylesheet"
+    />
 
-    <link rel="apple-touch-icon" sizes="180x180" href="favicons/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="favicons/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="favicons/favicon-16x16.png">
-    <link rel="manifest" href="favicons/manifest.json">
-    <link rel="shortcut icon" href="favicons/favicon.ico">
-    <meta name="msapplication-config" content="favicons/browserconfig.xml">
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="favicons/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="favicons/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="favicons/favicon-16x16.png"
+    />
+    <link rel="manifest" href="favicons/manifest.json" />
+    <link rel="shortcut icon" href="favicons/favicon.ico" />
+    <meta name="msapplication-config" content="favicons/browserconfig.xml" />
 
-    <link rel="stylesheet" type="text/css" href="css/fizika.css">
-    <link rel="stylesheet" type="text/css" href="css/radio.css">
-    <link rel="stylesheet" type="text/css" href="css/button.css">
-    <link rel="stylesheet" type="text/css" href="css/card.css">
+    <link rel="stylesheet" type="text/css" href="css/fizika.css" />
+    <link rel="stylesheet" type="text/css" href="css/radio.css" />
+    <link rel="stylesheet" type="text/css" href="css/button.css" />
+    <link rel="stylesheet" type="text/css" href="css/card.css" />
 
     <script src="js/jquery.min.js"></script>
+    <script src="js/load.js"></script>
     <script src="js/fizika.js"></script>
-</head>
-<body onresize="aspect()">
-<div id="titlebox">
-    <h1 id="cim">Fizika</h1>
-</div>
-<hr>
-<div class="menu">
-    <ul>
+  </head>
+  <body onresize="aspect()">
+    <div id="titlebox">
+      <h1 id="cim">Fizika</h1>
+    </div>
+    <hr />
+    <div class="menu">
+      <ul>
         <li id="bfooldal">Információk</li>
         <li id="bteszt">Tesztek</li>
         <li id="beredmenyek">Eredmények</li>
-    </ul>
-</div>
-<hr>
-<div id="wrapper">
-    <div class="szoveg" id="fooldal">
-        <p>Itt mindent megtalálsz, ami az <b>emelt szintű fizika</b> írásbeli érettségi teszt részének gyakorlásához
-            szükséges.</p>
-        <p>A Tesztek fülre kattintva juthatsz el a gyakorló feladatlapokig, amiket <b>a te beállításaid alapján</b>
-            állít össze az alkalmazás. Ezt egy <b>435 kérdést tartalmazó adatbázisból</b> viszi véghez, melyet az előző
-            <b>több mint 10 év</b> érettségijeinek feladatai alkotnak. Ebben a menüpontban nem csak témakör, hanem év
-            alapján is <b>rákereshetsz a feladatokra</b>.</p>
-        <p>A teszteken elért pontjaidat, és azokkal kapcsolatos egyéb infókat, az Eredményekben találhatsz.
-        <p>Ha hibát találtál, vagy javaslatod lenne az oldallal kapcsolatban, <b>keress nyugodtan</b> <a
-                href="mailto:schmelczerandras@gmail.com">e-mail</a>.</p>
-        <p style="margin-top: 0.5em"><i>Sikeres felkészülést!</i></p>
+      </ul>
     </div>
-    <div id="teszt">
+    <hr />
+    <div id="wrapper">
+      <div class="szoveg" id="fooldal">
+        <p>
+          Itt mindent megtalálsz, ami az <b>emelt szintű fizika</b> írásbeli
+          érettségi teszt részének gyakorlásához szükséges.
+        </p>
+        <p>
+          A Tesztek fülre kattintva juthatsz el a gyakorló feladatlapokig,
+          amiket <b>a te beállításaid alapján</b> állít össze az alkalmazás. Ezt
+          egy <b>435 kérdést tartalmazó adatbázisból</b> viszi véghez, melyet az
+          előző <b>több mint 10 év</b> érettségijeinek feladatai alkotnak. Ebben
+          a menüpontban nem csak témakör, hanem év alapján is
+          <b>rákereshetsz a feladatokra</b>.
+        </p>
+        <p>
+          A teszteken elért pontjaidat, és azokkal kapcsolatos egyéb infókat, az
+          Eredményekben találhatsz.
+        </p>
+        <p>
+          Ha hibát találtál, vagy javaslatod lenne az oldallal kapcsolatban,
+          <b>keress nyugodtan</b>
+          <a href="mailto:schmelczerandras@gmail.com">e-mail</a>.
+        </p>
+        <p style="margin-top: 0.5em"><i>Sikeres felkészülést!</i></p>
+      </div>
+      <div id="teszt">
         <div class="szoveg">
-            <p>Először válaszd ki, hogy <b>témakör</b> szerint szeretnél feladatokat megoldani, vagy az <b>előző évek
-                feladatsorai</b> közt szeretnél keresni. Ezután értelemszerűen add meg a szükséges paramétereket. </p>
-            <p>Az <b>érettségi</b> gombra kattintva véletlenszerűen választ az előző évek feladatai közül a rendszer.
-            </p>
-            <p>Az itt elért eredményeid az <b>eredmények</b> fül alatt lesznek láthatóak.</p>
+          <p>
+            Először válaszd ki, hogy <b>témakör</b> szerint szeretnél
+            feladatokat megoldani, vagy az <b>előző évek feladatsorai</b> közt
+            szeretnél keresni. Ezután értelemszerűen add meg a szükséges
+            paramétereket.
+          </p>
+          <p>
+            Az <b>érettségi</b> gombra kattintva véletlenszerűen választ az
+            előző évek feladatai közül a rendszer.
+          </p>
+          <p>
+            Az itt elért eredményeid az <b>eredmények</b> fül alatt lesznek
+            láthatóak.
+          </p>
         </div>
         <div class="buttonwrapper">
-            <button class="button" id="btemakor">Témakörök</button>
-            <button class="button" id="bkereses">Régi feladatsorok</button>
-            <button class="button" id="berettsegi">Érettségi</button>
+          <button class="button" id="btemakor">Témakörök</button>
+          <button class="button" id="bkereses">Régi feladatsorok</button>
+          <button class="button" id="berettsegi">Érettségi</button>
         </div>
         <div id="temakor">
-            <div class="szoveg">
-                <p>Egyszerre több témakört is kiválaszthatsz. A témakörök csoportosítva vannak, a csoport nevét
-                    kiválasztva, a csoport összes tagját kijelölöd.</p>
+          <div class="szoveg">
+            <p>
+              Egyszerre több témakört is kiválaszthatsz. A témakörök
+              csoportosítva vannak, a csoport nevét kiválasztva, a csoport
+              összes tagját kijelölöd.
+            </p>
+          </div>
+          <div id="temak">
+            <div class="fele" id="bal">
+              <div class="negyzet main">
+                <input type="checkbox" id="mec" />
+                <label class="mbcheck">Mechanika</label>
+              </div>
+              <br />
+              <div class="negyzet">
+                <input type="checkbox" id="mk" />
+                <label class="mbcheck">Kinematika</label>
+              </div>
+              <br />
+              <div class="negyzet">
+                <input type="checkbox" id="md" />
+                <label class="mbcheck">Dinamika</label>
+              </div>
+              <br />
+              <div class="negyzet">
+                <input type="checkbox" id="me" />
+                <label class="mbcheck">Munka és energia</label>
+              </div>
+              <br />
+              <div class="negyzet">
+                <input type="checkbox" id="mf" />
+                <label class="mbcheck">Folyadékok és gázok mechanikája</label>
+              </div>
+              <br />
+              <div class="negyzet">
+                <input type="checkbox" id="mr" />
+                <label class="mbcheck">Rezgések és hullámok</label>
+              </div>
+              <br />
+              <div class="negyzet main">
+                <input type="checkbox" id="h" />
+                <label class="mbcheck">Hőtan</label>
+              </div>
+              <br />
+              <div class="negyzet main">
+                <input type="checkbox" id="ele" />
+                <label class="mbcheck">Elektromosság</label>
+              </div>
+              <br />
+              <div class="negyzet">
+                <input type="checkbox" id="es" />
+                <label class="mbcheck">Elektrosztatika</label>
+              </div>
+              <br />
+              <div class="negyzet">
+                <input type="checkbox" id="ee" />
+                <label class="mbcheck">Egyenáram</label>
+              </div>
+              <br />
+              <div class="negyzet">
+                <input type="checkbox" id="ev" />
+                <label class="mbcheck">Váltakozó áram</label>
+              </div>
+              <br />
             </div>
-            <div id="temak">
-                <div class="fele" id="bal">
-                    <div class="negyzet main"><input type="checkbox" id="mec"> <label class="mbcheck">Mechanika</label>
-                    </div>
-                    <br>
-                    <div class="negyzet"><input type="checkbox" id="mk"> <label class="mbcheck">Kinematika</label></div>
-                    <br>
-                    <div class="negyzet"><input type="checkbox" id="md"> <label class="mbcheck">Dinamika</label></div>
-                    <br>
-                    <div class="negyzet"><input type="checkbox" id="me"> <label class="mbcheck">Munka és energia</label>
-                    </div>
-                    <br>
-                    <div class="negyzet"><input type="checkbox" id="mf"> <label class="mbcheck">Folyadékok és gázok
-                        mechanikája</label></div>
-                    <br>
-                    <div class="negyzet"><input type="checkbox" id="mr"> <label class="mbcheck">Rezgések és
-                        hullámok</label></div>
-                    <br>
-                    <div class="negyzet main"><input type="checkbox" id="h"> <label class="mbcheck">Hőtan</label></div>
-                    <br>
-                    <div class="negyzet main"><input type="checkbox" id="ele"> <label
-                            class="mbcheck">Elektromosság</label></div>
-                    <br>
-                    <div class="negyzet"><input type="checkbox" id="es"> <label class="mbcheck">Elektrosztatika</label>
-                    </div>
-                    <br>
-                    <div class="negyzet"><input type="checkbox" id="ee"> <label class="mbcheck">Egyenáram</label></div>
-                    <br>
-                    <div class="negyzet"><input type="checkbox" id="ev"> <label class="mbcheck">Váltakozó áram</label>
-                    </div>
-                    <br>
-                </div>
-                <div class="fele" id="jobb">
-                    <div class="negyzet main"><input type="checkbox" id="m"> <label class="mbcheck">Mágnesesség</label>
-                    </div>
-                    <br>
-                    <div class="negyzet main"><input type="checkbox" id="o"> <label class="mbcheck">Fénytan</label>
-                    </div>
-                    <br>
-                    <div class="negyzet main"><input type="checkbox" id="atm"> <label class="mbcheck">Atomfizika</label>
-                    </div>
-                    <br>
-                    <div class="negyzet"><input type="checkbox" id="ah"> <label class="mbcheck">Atomhéj</label></div>
-                    <br>
-                    <div class="negyzet"><input type="checkbox" id="am"> <label class="mbcheck">Atommag</label></div>
-                    <br>
-                    <div class="negyzet main"><input type="checkbox" id="cs"> <label class="mbcheck">Égi mechanika,
-                        csillagászat</label></div>
-                    <br>
-                    <div class="negyzet main"><input type="checkbox" id="v"> <label class="mbcheck">Vegyes</label></div>
-                    <br>
-                    <div class="negyzet"><input type="number" id="numberof" placeholder="Feladatok mennyisége: " min="1"
-                                                max="435"></div>
-                </div>
+            <div class="fele" id="jobb">
+              <div class="negyzet main">
+                <input type="checkbox" id="m" />
+                <label class="mbcheck">Mágnesesség</label>
+              </div>
+              <br />
+              <div class="negyzet main">
+                <input type="checkbox" id="o" />
+                <label class="mbcheck">Fénytan</label>
+              </div>
+              <br />
+              <div class="negyzet main">
+                <input type="checkbox" id="atm" />
+                <label class="mbcheck">Atomfizika</label>
+              </div>
+              <br />
+              <div class="negyzet">
+                <input type="checkbox" id="ah" />
+                <label class="mbcheck">Atomhéj</label>
+              </div>
+              <br />
+              <div class="negyzet">
+                <input type="checkbox" id="am" />
+                <label class="mbcheck">Atommag</label>
+              </div>
+              <br />
+              <div class="negyzet main">
+                <input type="checkbox" id="cs" />
+                <label class="mbcheck">Égi mechanika, csillagászat</label>
+              </div>
+              <br />
+              <div class="negyzet main">
+                <input type="checkbox" id="v" />
+                <label class="mbcheck">Vegyes</label>
+              </div>
+              <br />
+              <div class="negyzet">
+                <input
+                  type="number"
+                  id="numberof"
+                  placeholder="Feladatok mennyisége: "
+                  min="1"
+                  max="435"
+                />
+              </div>
             </div>
+          </div>
         </div>
         <div id="kereses">
-            <div class="szoveg">
-                <p>Válaszd ki, melyik feladatsort/feladatot szeretnéd betölteni. Ha valamelyik opciót <b>összes</b>
-                    álláson hagyod, akkor értelemszerűen úgy veszi a rendszer, mintha az adott listából az összes elemet
-                    kiválasztottad volna. Egyes évekhez több, mint 2 féle feladatlap is tartozhat, ezeket az aktuális
-                    éveket kiválasztva könnyű megtalálni.</p>
-            </div>
-            <div class="buttonwrapper">
-                <select id="evszam">
-                    <option value="all/">Összes év</option>
-                    <option value="2019/">2019</option>
-                    <option value="2018/">2018</option>
-                    <option value="2017/">2017</option>
-                    <option value="2016/">2016</option>
-                    <option value="2015/">2015</option>
-                    <option value="2014/">2014</option>
-                    <option value="2013/">2013</option>
-                    <option value="2012/">2012</option>
-                    <option value="2011/">2011</option>
-                    <option value="2010/">2010</option>
-                    <option value="2009/">2009</option>
-                    <option value="2008/">2008</option>
-                    <option value="2007/">2007</option>
-                    <option value="2006/">2006</option>
-                    <option value="2005/">2005</option>
-                </select>
-                <select id="honap">
-                    <option value="all">Összes feladatsora</option>
-                    <option value="1" class="f">Május-Június</option>
-                    <option value="2" class="f">Október-November</option>
-                    <option value="1" class="f2006">Február-Március</option>
-                    <option value="2" class="f2006">Május-Június</option>
-                    <option value="3" class="f2006">Október-November</option>
-                    <option value="m1" class="f2016">1. Mintafeladatsor</option>
-                    <option value="m2" class="f2016">2. Mintafeladatsor</option>
-                    <option value="m3" class="f2016">3. Mintafeladatsor</option>
-                </select>
-                <select id="feladat">
-                    <option value="/all">Összes feladat</option>
-                    <option value="/1">1. feladat</option>
-                    <option value="/2">2. feladat</option>
-                    <option value="/3">3. feladat</option>
-                    <option value="/4">4. feladat</option>
-                    <option value="/5">5. feladat</option>
-                    <option value="/6">6. feladat</option>
-                    <option value="/7">7. feladat</option>
-                    <option value="/8">8. feladat</option>
-                    <option value="/9">9. feladat</option>
-                    <option value="/10">10. feladat</option>
-                    <option value="/11">11. feladat</option>
-                    <option value="/12">12. feladat</option>
-                    <option value="/13">13. feladat</option>
-                    <option value="/14">14. feladat</option>
-                    <option value="/15">15. feladat</option>
-                </select>
-            </div>
+          <div class="szoveg">
+            <p>
+              Válaszd ki, melyik feladatsort/feladatot szeretnéd betölteni. Ha
+              valamelyik opciót <b>összes</b> álláson hagyod, akkor
+              értelemszerűen úgy veszi a rendszer, mintha az adott listából az
+              összes elemet kiválasztottad volna. Egyes évekhez több, mint 2
+              féle feladatlap is tartozhat, ezeket az aktuális éveket
+              kiválasztva könnyű megtalálni.
+            </p>
+          </div>
+          <div class="buttonwrapper">
+            <select id="evszam">
+              <option value="all/">Összes év</option>
+              <option value="2021/">2021</option>
+              <option value="2020/">2020</option>
+              <option value="2019/">2019</option>
+              <option value="2018/">2018</option>
+              <option value="2017/">2017</option>
+              <option value="2016/">2016</option>
+              <option value="2015/">2015</option>
+              <option value="2014/">2014</option>
+              <option value="2013/">2013</option>
+              <option value="2012/">2012</option>
+              <option value="2011/">2011</option>
+              <option value="2010/">2010</option>
+              <option value="2009/">2009</option>
+              <option value="2008/">2008</option>
+              <option value="2007/">2007</option>
+              <option value="2006/">2006</option>
+              <option value="2005/">2005</option>
+            </select>
+            <select id="honap">
+              <option value="all">Összes feladatsora</option>
+              <option value="1" class="f">Május-Június</option>
+              <option value="2" class="f">Október-November</option>
+              <option value="1" class="f2006">Február-Március</option>
+              <option value="2" class="f2006">Május-Június</option>
+              <option value="3" class="f2006">Október-November</option>
+              <option value="m1" class="f2016">1. Mintafeladatsor</option>
+              <option value="m2" class="f2016">2. Mintafeladatsor</option>
+              <option value="m3" class="f2016">3. Mintafeladatsor</option>
+            </select>
+            <select id="feladat">
+              <option value="/all">Összes feladat</option>
+              <option value="/1">1. feladat</option>
+              <option value="/2">2. feladat</option>
+              <option value="/3">3. feladat</option>
+              <option value="/4">4. feladat</option>
+              <option value="/5">5. feladat</option>
+              <option value="/6">6. feladat</option>
+              <option value="/7">7. feladat</option>
+              <option value="/8">8. feladat</option>
+              <option value="/9">9. feladat</option>
+              <option value="/10">10. feladat</option>
+              <option value="/11">11. feladat</option>
+              <option value="/12">12. feladat</option>
+              <option value="/13">13. feladat</option>
+              <option value="/14">14. feladat</option>
+              <option value="/15">15. feladat</option>
+            </select>
+          </div>
         </div>
         <div class="buttonwrapper">
-            <button class="button" id="load">Keresés</button>
+          <button class="button" id="load">Keresés</button>
         </div>
         <div id="state"></div>
         <div id="state2"></div>
         <div id="loading">
-            <img id="loadingGif" src="auxIMG/load.gif" height="45" width="45">
+          <img id="loadingGif" src="auxIMG/load.gif" height="45" width="45" />
         </div>
         <div id="percentage"></div>
         <div id="content"></div>
         <div class="buttonwrapper" id="megoldas">
-            <button class="button scroll" id="ans">Kiértékelés</button>
-            <button class="button scroll" id="cAns">Helyes megoldások</button>
+          <button class="button scroll" id="ans">Kiértékelés</button>
+          <button class="button scroll" id="cAns">Helyes megoldások</button>
         </div>
-    </div>
-    <div id="eredmenyek" class="szoveg">
-        <p>Itt az eredményeidet tudod megnézni <b>visszamenőleg</b>. Ezek az adatok az eszközödön kerülnek tárolásra,
-            azokat kizárólag innen tudod elérni. Az adataid biztonságban vannak, azokat az interneten keresztül sehova
-            se küldjük el.</p>
+      </div>
+      <div id="eredmenyek" class="szoveg">
+        <p>
+          Itt az eredményeidet tudod megnézni <b>visszamenőleg</b>. Ezek az
+          adatok az eszközödön kerülnek tárolásra, azokat kizárólag innen tudod
+          elérni. Az adataid biztonságban vannak, azokat az interneten keresztül
+          sehova se küldjük el.
+        </p>
         <p id="info"></p>
         <div id="tablazat"></div>
+      </div>
+      <div id="preload">
+        <img src="auxIMG/checked.svg" height="0" width="0" />
+        <img src="auxIMG/unchecked.svg" height="0" width="0" />
+      </div>
     </div>
-    <div id="preload">
-        <img src="auxIMG/checked.svg" height="0" width="0">
-        <img src="auxIMG/unchecked.svg" height="0" width="0">
-    </div>
-</div>
-</body>
+  </body>
 </html>
