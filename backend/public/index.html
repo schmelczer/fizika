@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="hu">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fizika Admin - Kérdések és képek kezelése</title>
+    <script
+      defer
+      data-domain="fizika.schmelczer.dev"
+      data-api="https://stats.schmelczer.dev/status"
+      src="https://stats.schmelczer.dev/js/script.file-downloads.hash.outbound-links.js"
+    ></script>
+    <script>
+      window.plausible =
+        window.plausible ||
+        function () {
+          (window.plausible.q = window.plausible.q || []).push(arguments);
+        };
+    </script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        background-color: #f5f5f5;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      .header {
+        background: #003366;
+        color: white;
+        padding: 1rem;
+        margin-bottom: 2rem;
+        border-radius: 8px;
+      }
+
+      .tabs {
+        display: flex;
+        margin-bottom: 2rem;
+        background: white;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .tab {
+        flex: 1;
+        padding: 1rem;
+        background: white;
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: background-color 0.3s;
+      }
+
+      .tab:hover {
+        background: #f0f0f0;
+      }
+
+      .tab.active {
+        background: #003366;
+        color: white;
+      }
+      .tab:not(.active) {
+        color: #333;
+      }
+
+      .tab-content {
+        display: none;
+        background: white;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .tab-content.active {
+        display: block;
+      }
+
+      .form-group {
+        margin-bottom: 1rem;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: bold;
+      }
+
+      input,
+      textarea,
+      select {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 1rem;
+      }
+
+      textarea {
+        min-height: 100px;
+        resize: vertical;
+      }
+
+      button {
+        background: #003366;
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: background-color 0.3s;
+      }
+
+      button:hover {
+        background: #004488;
+      }
+
+      button.secondary {
+        background: #666;
+      }
+
+      button.danger {
+        background: #dc3545;
+      }
+
+      button.danger:hover {
+        background: #c82333;
+      }
+
+      .questions-list {
+        margin-top: 2rem;
+      }
+
+      .question-item {
+        background: #f8f9fa;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        border-radius: 4px;
+        border-left: 4px solid #003366;
+      }
+
+      .question-actions button {
+        margin-right: 0.5rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .images-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-top: 1rem;
+      }
+
+      .image-item {
+        background: white;
+        padding: 1rem;
+        border-radius: 4px;
+        text-align: center;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .image-item img {
+        max-width: 100%;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 4px;
+      }
+
+      .alert {
+        padding: 1rem;
+        margin-bottom: 1rem;
+        border-radius: 4px;
+      }
+
+      .alert-success {
+        background: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+      }
+
+      .alert-danger {
+        background: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+      }
+
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+
+      .modal-content {
+        background-color: white;
+        margin: 5% auto;
+        padding: 2rem;
+        border-radius: 8px;
+        width: 80%;
+        max-width: 600px;
+        max-height: 80%;
+        overflow-y: auto;
+      }
+
+      .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      .close:hover {
+        color: black;
+      }
+
+      @media (max-width: 768px) {
+        .container {
+          padding: 10px;
+        }
+        .tabs {
+          flex-direction: column;
+        }
+        .images-grid {
+          grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>Fizika Admin Panel</h1>
+        <p>Kérdések és képek kezelése</p>
+      </div>
+
+      <!-- Admin Panel -->
+      <div class="tabs">
+        <button class="tab active" data-tab="questions">
+          Kérdések kezelése
+        </button>
+        <button class="tab" data-tab="images">Képek kezelése</button>
+      </div>
+
+      <!-- Questions Tab -->
+      <div id="questionsTab" class="tab-content active">
+        <h2>Kérdések kezelése</h2>
+        <div id="questionsAlert"></div>
+
+        <button id="addQuestionBtn">Új kérdés hozzáadása</button>
+
+        <div id="questionsList" class="questions-list">
+          <div>Kérdések betöltése...</div>
+        </div>
+      </div>
+
+      <!-- Images Tab -->
+      <div id="imagesTab" class="tab-content">
+        <h2>Képek kezelése</h2>
+        <div id="imagesAlert"></div>
+
+        <div class="form-group">
+          <label for="imageUpload">Új kép feltöltése:</label>
+          <input type="file" id="imageUpload" accept="image/*" />
+        </div>
+
+        <div id="imagesList" class="images-grid">
+          <div>Képek betöltése...</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Question Edit Modal -->
+    <div id="questionModal" class="modal">
+      <div class="modal-content">
+        <span class="close" id="closeModalBtn">&times;</span>
+        <h2 id="modalTitle">Kérdés szerkesztése</h2>
+        <form id="questionForm">
+          <input type="hidden" id="questionId" />
+
+          <div class="form-group">
+            <label for="questionSource">Forrás:</label>
+            <input type="text" id="questionSource" required />
+          </div>
+
+          <div class="form-group">
+            <label for="questionDescription">Kérdés szövege:</label>
+            <textarea id="questionDescription" required></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="questionA">A válasz:</label>
+            <textarea id="questionA"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="questionB">B válasz:</label>
+            <textarea id="questionB"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="questionC">C válasz:</label>
+            <textarea id="questionC"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="questionD">D válasz:</label>
+            <textarea id="questionD"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="questionCorrect">Helyes válasz:</label>
+            <select id="questionCorrect" required>
+              <option value="1">A</option>
+              <option value="2">B</option>
+              <option value="3">C</option>
+              <option value="4">D</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="questionType">Típus:</label>
+            <select id="questionType" required>
+              <option value="mec">Mechanika</option>
+              <option value="mk">Kinematika</option>
+              <option value="md">Dinamika</option>
+              <option value="me">Munka és energia</option>
+              <option value="mf">Folyadékok és gázok mechanikája</option>
+              <option value="mr">Rezgések és hullámok</option>
+              <option value="h">Hőtan</option>
+              <option value="ele">Elektromosság</option>
+              <option value="es">Elektrosztatika</option>
+              <option value="ee">Egyenáram</option>
+              <option value="ev">Váltakozó áram</option>
+              <option value="m">Mágnesesség</option>
+              <option value="o">Fénytan</option>
+              <option value="atm">Atomfizika</option>
+              <option value="ah">Atomhéj</option>
+              <option value="am">Atommag</option>
+              <option value="cs">Égi mechanika, csillagászat</option>
+              <option value="v">Vegyes</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="questionImage">Kép:</label>
+            <input
+              type="text"
+              id="questionImage"
+              placeholder="Kép fájlneve (opcionális)"
+            />
+          </div>
+
+          <button type="submit">Mentés</button>
+          <button type="button" class="secondary" id="cancelBtn">Mégse</button>
+        </form>
+      </div>
+    </div>
+
+    <script src="admin.js"></script>
+  </body>
+</html>
