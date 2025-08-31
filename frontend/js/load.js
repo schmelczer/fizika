@@ -68,7 +68,7 @@ const loadQuestions = async (
       <div class="feladat card" id="feladat${id}"> 
         <h2 style="float: left;">${i + 1}.</h2><h2>${source}</h2>
         <pre>${description}</pre>
-        ${image ? `<img src="${API_BASE}/api/pics/${image}" onerror="this.src='pics/${image}'"><br>` : ""}
+        ${image ? `<img src="${API_BASE}/api/pics/${image}" crossorigin="anonymous" onerror="this.src='pics/${image}'"><br>` : ""}
         <form id="form${id}"">
           <input type="radio" id="rad1" name="group">
           <label id="label${id}" class="rad1">${a}</label>
@@ -169,14 +169,14 @@ const initializeYearDropdown = async () => {
 
     // Preserve the "Összes év" option and add dynamic years
     const allYearsOption = '<option value="all/">Összes év</option>';
-    const yearOptions = uniqueYears.map(year => 
+    const yearOptions = uniqueYears.map(year =>
       `<option value="${year}/">${year}</option>`
     ).join('');
 
     yearDropdown.innerHTML = allYearsOption + yearOptions;
-    
+
     console.log('Year dropdown initialized with years:', uniqueYears);
-    
+
   } catch (error) {
     console.error('Failed to initialize year dropdown:', error);
   }
@@ -211,7 +211,7 @@ const initializeMonthDropdown = (selectedYear) => {
   } else {
     // Extract year from selected value (e.g., "2024/" -> "2024")
     const year = selectedYear.replace('/', '');
-    
+
     // Get unique months for this specific year
     const monthSet = new Set();
     questions.forEach(q => {
@@ -222,21 +222,21 @@ const initializeMonthDropdown = (selectedYear) => {
     });
 
     const uniqueMonths = Array.from(monthSet).sort();
-    
+
     // Special handling for known year patterns
     if (year === '2006') {
       // Preserve existing 2006 logic but add any new months found
       monthOptions += '<option value="1" class="f2006">Február-Március</option>';
       monthOptions += '<option value="2" class="f2006">Május-Június</option>';
       monthOptions += '<option value="3" class="f2006">Október-November</option>';
-      
+
       // Add any dynamic months not covered by the standard ones
       uniqueMonths.forEach(month => {
         if (!['1', '2', '3'].includes(month)) {
           monthOptions += `<option value="${month}" class="f2006">${getMonthLabel(month)}</option>`;
         }
       });
-      
+
     } else if (year === '2016') {
       // Preserve existing 2016 logic but add any new months found  
       monthOptions += '<option value="1" class="f">Május-Június</option>';
@@ -244,38 +244,38 @@ const initializeMonthDropdown = (selectedYear) => {
       monthOptions += '<option value="m1" class="f2016">1. Mintafeladatsor</option>';
       monthOptions += '<option value="m2" class="f2016">2. Mintafeladatsor</option>';
       monthOptions += '<option value="m3" class="f2016">3. Mintafeladatsor</option>';
-      
+
       // Add any dynamic months not covered
       uniqueMonths.forEach(month => {
         if (!['1', '2', 'm1', 'm2', 'm3'].includes(month)) {
           monthOptions += `<option value="${month}" class="f">${getMonthLabel(month)}</option>`;
         }
       });
-      
+
     } else if (year === '2017') {
       // Preserve existing 2017 logic but add any new months found
       monthOptions += '<option value="1" class="f">Május-Június</option>';
       monthOptions += '<option value="2" class="f">Október-November</option>';
-      
+
       // Add any dynamic months
       uniqueMonths.forEach(month => {
         if (!['1', '2'].includes(month)) {
           monthOptions += `<option value="${month}" class="f">${getMonthLabel(month)}</option>`;
         }
       });
-      
+
     } else {
       // For other years, use standard logic plus dynamic months
       const hasStandard1 = uniqueMonths.includes('1');
       const hasStandard2 = uniqueMonths.includes('2');
-      
+
       if (hasStandard1) {
         monthOptions += '<option value="1" class="f">Május-Június</option>';
       }
       if (hasStandard2) {
         monthOptions += '<option value="2" class="f">Október-November</option>';
       }
-      
+
       // Add any non-standard months
       uniqueMonths.forEach(month => {
         if (!['1', '2'].includes(month)) {
@@ -294,12 +294,12 @@ const getMonthLabel = (monthValue) => {
   // Handle known patterns
   const knownLabels = {
     '1': 'Május-Június',
-    '2': 'Október-November', 
+    '2': 'Október-November',
     '3': 'Harmadik időszak',
     'm1': '1. Mintafeladatsor',
-    'm2': '2. Mintafeladatsor', 
+    'm2': '2. Mintafeladatsor',
     'm3': '3. Mintafeladatsor'
   };
-  
+
   return knownLabels[monthValue] || monthValue;
 };
