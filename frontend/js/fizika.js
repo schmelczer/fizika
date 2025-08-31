@@ -259,6 +259,17 @@ setInterval(function () {
 
 $(document).ready(function () {
   eredmeny();
+  
+  // Initialize year dropdown with dynamic years from question data
+  if (typeof initializeYearDropdown === 'function') {
+    initializeYearDropdown().then(() => {
+      // Initialize month dropdown for default "all" year selection
+      if (typeof initializeMonthDropdown === 'function') {
+        initializeMonthDropdown('all/');
+      }
+    });
+  }
+  
   $(window).on("mousewheel", function () {
     $("body").stop();
   });
@@ -316,27 +327,36 @@ $(document).ready(function () {
     isSearch = false;
   });
   $("#evszam").change(function () {
-    if ($("#evszam").val() == "2006/") {
-      $(".f2006").show();
-      $(".f2016").hide();
-      $(".f").hide();
-      $(".fnem17").hide();
-    } else if ($("#evszam").val() == "2016/") {
-      $(".f2006").hide();
-      $(".f2016").show();
-      $(".f").show();
-      $(".fnem17").show();
-    } else if ($("#evszam").val() == "2017/") {
-      $(".f2006").hide();
-      $(".f2016").hide();
-      $(".f").show();
-      $(".fnem17").hide();
+    const selectedYear = $("#evszam").val();
+    
+    // Initialize month dropdown dynamically based on selected year
+    if (typeof initializeMonthDropdown === 'function') {
+      initializeMonthDropdown(selectedYear);
     } else {
-      $(".f2006").hide();
-      $(".f2016").hide();
-      $(".f").show();
-      $(".fnem17").show();
+      // Fallback to original logic if dynamic function not available
+      if (selectedYear == "2006/") {
+        $(".f2006").show();
+        $(".f2016").hide();
+        $(".f").hide();
+        $(".fnem17").hide();
+      } else if (selectedYear == "2016/") {
+        $(".f2006").hide();
+        $(".f2016").show();
+        $(".f").show();
+        $(".fnem17").show();
+      } else if (selectedYear == "2017/") {
+        $(".f2006").hide();
+        $(".f2016").hide();
+        $(".f").show();
+        $(".fnem17").hide();
+      } else {
+        $(".f2006").hide();
+        $(".f2016").hide();
+        $(".f").show();
+        $(".fnem17").show();
+      }
     }
+    
     $("#honap").val("all");
   });
 
