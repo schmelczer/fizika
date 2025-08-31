@@ -12,7 +12,11 @@ const PORT = process.env.PORT || 3001;
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
-      defaultSrc: ["'self'", "'unsafe-inline'"],
+      defaultSrc: [
+        "'self'",
+        "https://stats.schmelczer.dev",
+        "'unsafe-inline'",
+      ],
       scriptSrc: [
         "'self'",
         "https://stats.schmelczer.dev",
