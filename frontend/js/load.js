@@ -1,4 +1,6 @@
 let questions = null;
+const API_BASE = window.location.hostname === 'localhost' ? 'http://localhost:3001' : 'https://your-backend-domain.com';
+
 const loadQuestions = async (
   isSearch,
   categories,
@@ -6,7 +8,12 @@ const loadQuestions = async (
   questionCount
 ) => {
   if (questions === null) {
-    questions = await (await fetch("fizika.json")).json();
+    try {
+      questions = await (await fetch(`${API_BASE}/api/fizika`)).json();
+    } catch (error) {
+      console.error('Failed to load questions from API, falling back to local file:', error);
+      questions = await (await fetch("fizika.json")).json();
+    }
   }
 
   let currentQuestions = questions.slice();
@@ -31,7 +38,7 @@ const loadQuestions = async (
       <div class="feladat card" id="feladat${id}"> 
         <h2 style="float: left;">${i + 1}.</h2><h2>${source}</h2>
         <pre>${description}</pre>
-        ${image ? `<img src="pics/${image}"><br>` : ""}
+        ${image ? `<img src="${API_BASE}/api/pics/${image}"><br>` : ""}
         <form id="form${id}"">
           <input type="radio" id="rad1" name="group">
           <label id="label${id}" class="rad1">${a}</label>
