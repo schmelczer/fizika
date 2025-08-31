@@ -1,5 +1,11 @@
 const API_BASE = window.location.origin;
 
+window.plausible =
+  window.plausible ||
+  function () {
+    (window.plausible.q = window.plausible.q || []).push(arguments);
+  };
+
 document.addEventListener("DOMContentLoaded", function () {
   loadQuestions();
   loadImages();
