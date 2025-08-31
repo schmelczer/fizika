@@ -58,7 +58,7 @@ fizika/
 
 3. **Access the applications:**
    - **Student Quiz**: http://localhost (or your domain)
-   - **Admin Panel**: http://localhost:3001/admin.html
+   - **Admin Panel**: http://localhost:3001/
 
 ### Option 2: Local Development
 
@@ -87,15 +87,20 @@ NODE_ENV=production
 
 # Frontend integration
 FRONTEND_URL=*
+
+# File paths (relative to backend directory)
+DATA_PATH=../fizika.json
+PICS_PATH=../pics
 ```
 
 ## 🔌 API Integration
 
-The frontend automatically detects the backend:
-- **Local Development**: `http://localhost:3001`
-- **Production**: Configure `API_BASE` in `js/load.js`
+The frontend **prioritizes backend API** with local fallback:
+- **Primary**: Auto-detects backend (`localhost:3001` for dev, same origin for production)
+- **Fallback**: Local `fizika.json` and `pics/` directory when backend unavailable
+- **Images**: Try backend API first, fallback to local `pics/` directory
 
-If the backend is unavailable, the frontend falls back to loading `fizika.json` directly.
+**Graceful degradation** - Quiz works even when backend is down, using local files.
 
 ## 📊 API Endpoints
 

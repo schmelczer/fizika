@@ -11,6 +11,8 @@ services:
       - NODE_ENV=production
       - PORT=3001
       - FRONTEND_URL=${FRONTEND_URL:-*}
+      - DATA_PATH=${DATA_PATH:-/usr/src/app/fizika.json}
+      - PICS_PATH=${PICS_PATH:-/usr/src/app/pics}
     volumes:
       # Mount data files
       - ./fizika.json:/usr/src/app/fizika.json:ro
@@ -37,6 +39,8 @@ services:
       - NODE_ENV=development
       - PORT=3001
       - FRONTEND_URL=*
+      - DATA_PATH=/usr/src/app/fizika.json
+      - PICS_PATH=/usr/src/app/pics
     volumes:
       - ./backend:/usr/src/app
       - ./fizika.json:/usr/src/app/fizika.json

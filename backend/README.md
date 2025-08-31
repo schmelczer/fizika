@@ -56,8 +56,8 @@ A secure Node.js/Express backend for managing physics quiz questions and images 
    ```
 
 4. **Access the admin interface:**
-   - Open http://localhost:3001/admin.html
-   - Default password: `admin123` (change this!)
+   - Open http://localhost:3001/
+   - No authentication required
 
 ### Local Development
 
@@ -169,7 +169,7 @@ The project includes a GitHub Actions workflow that:
 
 ## Admin Interface
 
-Access the admin interface at `/admin.html`:
+Access the admin interface at `/`:
 - **Questions Tab**: Add, edit, delete quiz questions
 - **Images Tab**: Upload and manage image files
 - **Responsive Design**: Works on desktop and mobile

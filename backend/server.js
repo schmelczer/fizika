@@ -15,16 +15,25 @@ app.use(cors({
   credentials: true
 }));
 
-app.use(express.json({ limit: '10mb' }));
+app.use(express.json({ limit: '100mb' }));
 app.use(express.static('public'));
 
 // File paths
-const DATA_PATH = path.join(__dirname, '../frontend/fizika.json');
-const PICS_PATH = path.join(__dirname, '../frontend/pics');
+const DATA_PATH = process.env.DATA_PATH || path.join(__dirname, '../fizika.json');
+const PICS_PATH = process.env.PICS_PATH || path.join(__dirname, '../pics');
 
 // Multer configuration for image uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, PICS_PATH);
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.originalname);
+  }
+});
+
 const upload = multer({
-  dest: PICS_PATH,
+  storage: storage,
   limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
   fileFilter: (req, file, cb) => {
     if (file.mimetype.startsWith('image/')) {
@@ -32,9 +41,6 @@ const upload = multer({
     } else {
       cb(new Error('Only images allowed'));
     }
-  },
-  filename: (req, file, cb) => {
-    cb(null, file.originalname);
   }
 });
 

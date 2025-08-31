@@ -25,68 +25,91 @@ async function ajaxLoad(type) {
   $("#loadingGif").show();
 
   let result = "";
-  if (type == 1) {
-    var source =
-      "^" + $("#evszam").val() + $("#honap").val() + $("#feladat").val() + "$";
-    for (var i = 0; i <= 3; i++) {
-      source = source.replace("all", ".*");
-      console.log(source);
+  
+  try {
+    if (type == 1) {
+      var source =
+        "^" + $("#evszam").val() + $("#honap").val() + $("#feladat").val() + "$";
+      for (var i = 0; i <= 3; i++) {
+        source = source.replace("all", ".*");
+        console.log(source);
+      }
+      result = await loadQuestions(true, undefined, source, 1000000);
+    } else if (type == 2) {
+      result = await loadQuestions(
+        false,
+        [
+          "mk",
+          "md",
+          "me",
+          "mf",
+          "mr",
+          "h",
+          "es",
+          "ee",
+          "ev",
+          "m",
+          "o",
+          "ah",
+          "am",
+          "cs",
+          "v",
+        ],
+        undefined,
+        15
+      );
+    } else {
+      var NOQ = $("#numberof").val() ? $("#numberof").val() : 15;
+      categories = [
+        $("#mk").prop("checked") ? "mk" : "",
+        $("#md").prop("checked") ? "md" : "",
+        $("#me").prop("checked") ? "me" : "",
+        $("#mf").prop("checked") ? "mf" : "",
+        $("#mr").prop("checked") ? "mr" : "",
+        $("#h").prop("checked") ? "h" : "",
+        $("#es").prop("checked") ? "es" : "",
+        $("#ee").prop("checked") ? "ee" : "",
+        $("#ev").prop("checked") ? "ev" : "",
+        $("#m").prop("checked") ? "m" : "",
+        $("#o").prop("checked") ? "o" : "",
+        $("#ah").prop("checked") ? "ah" : "",
+        $("#am").prop("checked") ? "am" : "",
+        $("#cs").prop("checked") ? "cs" : "",
+        $("#v").prop("checked") ? "v" : "",
+      ];
+      result = await loadQuestions(false, categories, undefined, NOQ);
     }
-    result = await loadQuestions(true, undefined, source, 1000000);
-  } else if (type == 2) {
-    result = await loadQuestions(
-      false,
-      [
-        "mk",
-        "md",
-        "me",
-        "mf",
-        "mr",
-        "h",
-        "es",
-        "ee",
-        "ev",
-        "m",
-        "o",
-        "ah",
-        "am",
-        "cs",
-        "v",
-      ],
-      undefined,
-      15
-    );
-  } else {
-    var NOQ = $("#numberof").val() ? $("#numberof").val() : 15;
-    categories = [
-      $("#mk").prop("checked") ? "mk" : "",
-      $("#md").prop("checked") ? "md" : "",
-      $("#me").prop("checked") ? "me" : "",
-      $("#mf").prop("checked") ? "mf" : "",
-      $("#mr").prop("checked") ? "mr" : "",
-      $("#h").prop("checked") ? "h" : "",
-      $("#es").prop("checked") ? "es" : "",
-      $("#ee").prop("checked") ? "ee" : "",
-      $("#ev").prop("checked") ? "ev" : "",
-      $("#m").prop("checked") ? "m" : "",
-      $("#o").prop("checked") ? "o" : "",
-      $("#ah").prop("checked") ? "ah" : "",
-      $("#am").prop("checked") ? "am" : "",
-      $("#cs").prop("checked") ? "cs" : "",
-      $("#v").prop("checked") ? "v" : "",
-    ];
-    result = await loadQuestions(false, categories, undefined, NOQ);
-  }
 
-  $("#loadingGif").hide();
-  $("#content").html(result);
-  $("#state2").hide();
-  if (
-    result !=
-    '<div class="buttonwrapper"><b style="font-size: 2rem;">Nem található a keresésnek megfelelő feladat!</b></div>'
-  ) {
-    $("#megoldas").show();
-    $("#state").html("Feladatok sikeresen letöltve!");
+    $("#loadingGif").hide();
+    $("#content").html(result);
+    $("#state2").hide();
+    if (
+      result !=
+      '<div class="buttonwrapper"><b style="font-size: 2rem;">Nem található a keresésnek megfelelő feladat!</b></div>'
+    ) {
+      $("#megoldas").show();
+      $("#state").html("Feladatok sikeresen letöltve!");
+    }
+  } catch (error) {
+    $("#loadingGif").hide();
+    $("#content").html(`
+      <div class="buttonwrapper">
+        <b style="font-size: 1.5rem; color: #dc3545;">
+          Nem sikerült betölteni a feladatokat
+        </b>
+        <p style="margin-top: 1rem; color: #666;">
+          ${error.message}
+        </p>
+        <p style="margin-top: 0.5rem; color: #666;">
+          Ellenőrizd az internetkapcsolatot vagy próbáld újra.
+        </p>
+        <button class="button" onclick="location.reload()" style="margin-top: 1rem;">
+          Újrapróbálás
+        </button>
+      </div>
+    `);
+    $("#state").html("Hiba a feladatok betöltésekor");
+    console.error('Quiz loading error:', error);
   }
 }
 
