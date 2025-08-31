@@ -9,7 +9,18 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // Security middleware
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'", "'unsafe-inline'"],
+      scriptSrc: [
+        "'self'",
+        "https://stats.schmelczer.dev",
+        "'unsafe-inline'",
+      ],
+    },
+  },
+}));
 app.use(cors({
   origin: process.env.FRONTEND_URL || '*',
   credentials: true
@@ -34,7 +45,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({
   storage: storage,
-  limits: { fileSize: 5 * 1024 * 1024 }, // 5MB
+  limits: { fileSize: 50 * 1024 * 1024 }, // 5MB
   fileFilter: (req, file, cb) => {
     if (file.mimetype.startsWith('image/')) {
       cb(null, true);
