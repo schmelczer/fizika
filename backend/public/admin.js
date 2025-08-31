@@ -1,36 +1,27 @@
 const API_BASE = window.location.origin;
 
-// Initialize
 document.addEventListener("DOMContentLoaded", function () {
   loadQuestions();
   loadImages();
-  
-  // Set up event listeners
   setupEventListeners();
 });
 
 function setupEventListeners() {
-  // Tab switching
   document.querySelectorAll('.tab[data-tab]').forEach(tab => {
     tab.addEventListener('click', (e) => {
       switchTab(e.target.dataset.tab);
     });
   });
-  
-  // Add question button
+
   document.getElementById('addQuestionBtn').addEventListener('click', showAddQuestionModal);
-  
-  // Image upload
+
   document.getElementById('imageUpload').addEventListener('change', uploadImage);
-  
-  // Modal close buttons
+
   document.getElementById('closeModalBtn').addEventListener('click', closeModal);
   document.getElementById('cancelBtn').addEventListener('click', closeModal);
-  
-  // Question form submit
+
   document.getElementById('questionForm').addEventListener('submit', saveQuestion);
-  
-  // Close modal when clicking outside
+
   document.getElementById('questionModal').addEventListener('click', (e) => {
     if (e.target.id === 'questionModal') {
       closeModal();
@@ -38,7 +29,6 @@ function setupEventListeners() {
   });
 }
 
-// Tab switching
 function switchTab(tabName) {
   document
     .querySelectorAll(".tab-content")
@@ -53,7 +43,6 @@ function switchTab(tabName) {
   if (tabName === "images") loadImages();
 }
 
-// Questions management
 async function loadQuestions() {
   try {
     const response = await fetch(`${API_BASE}/api/admin/questions`);
@@ -65,7 +54,7 @@ async function loadQuestions() {
     }
   } catch (error) {
     document.getElementById("questionsList").innerHTML =
-      '<div class="alert alert-danger">Hiba a kérdések betöltésekor</div>';
+      `<div class="alert alert-danger">Hiba a kérdések betöltésekor ${error.message}</div>`;
   }
 }
 
@@ -77,14 +66,12 @@ function displayQuestions(questions) {
         <div class="question-item">
             <h4>ID: ${q.id} - ${q.source}</h4>
             <p><strong>Kérdés:</strong> ${q.description.substring(
-              0,
-              100
-            )}...</p>
-            <p><strong>Típus:</strong> ${
-              q.type
-            } | <strong>Helyes válasz:</strong> ${
-        ["A", "B", "C", "D"][q.correct - 1]
-      }</p>
+        0,
+        100
+      )}...</p>
+            <p><strong>Típus:</strong> ${q.type
+        } | <strong>Helyes válasz:</strong> ${["A", "B", "C", "D"][q.correct - 1]
+        }</p>
             <div class="question-actions">
                 <button data-edit-id="${q.id}">Szerkesztés</button>
                 <button class="danger" data-delete-id="${q.id}">Törlés</button>
@@ -93,14 +80,13 @@ function displayQuestions(questions) {
     `
     )
     .join("");
-    
-  // Add event listeners for edit and delete buttons
+
   container.querySelectorAll('[data-edit-id]').forEach(btn => {
     btn.addEventListener('click', (e) => {
       editQuestion(parseInt(e.target.dataset.editId));
     });
   });
-  
+
   container.querySelectorAll('[data-delete-id]').forEach(btn => {
     btn.addEventListener('click', (e) => {
       deleteQuestion(parseInt(e.target.dataset.deleteId));
@@ -213,7 +199,6 @@ async function deleteQuestion(id) {
   }
 }
 
-// Images management
 async function loadImages() {
   try {
     const response = await fetch(`${API_BASE}/api/images`);
@@ -242,8 +227,7 @@ function displayImages(images) {
     `
     )
     .join("");
-    
-  // Add event listeners for delete buttons
+
   container.querySelectorAll('[data-delete-image]').forEach(btn => {
     btn.addEventListener('click', (e) => {
       deleteImage(e.target.dataset.deleteImage);
@@ -279,7 +263,7 @@ async function uploadImage() {
       );
     }
   } catch (error) {
-    showAlert("imagesAlert", "Kapcsolat hiba", "danger");
+    showAlert("imagesAlert", `Kapcsolat hiba: ${error.message}`, "danger");
   }
 }
 
@@ -301,11 +285,10 @@ async function deleteImage(filename) {
       throw new Error("Delete failed");
     }
   } catch (error) {
-    showAlert("imagesAlert", "Hiba a törlés során", "danger");
+    showAlert("imagesAlert", `Hiba a törlés során: ${error.message}`, "danger");
   }
 }
 
-// Utility functions
 function closeModal() {
   document.getElementById("questionModal").style.display = "none";
 }
@@ -320,5 +303,3 @@ function showAlert(elementId, message, type) {
     alertDiv.style.display = "none";
   }, 5000);
 }
-
-// This is now handled in setupEventListeners()

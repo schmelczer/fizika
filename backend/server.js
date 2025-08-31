@@ -19,8 +19,8 @@ app.use(express.json({ limit: '100mb' }));
 app.use(express.static('public'));
 
 // File paths
-const DATA_PATH = process.env.DATA_PATH || path.join(__dirname, '../fizika.json');
-const PICS_PATH = process.env.PICS_PATH || path.join(__dirname, '../pics');
+const DATA_PATH = process.env.DATA_PATH || path.join(__dirname, '../frontend/fizika.json');
+const PICS_PATH = process.env.PICS_PATH || path.join(__dirname, '../frontend/pics');
 
 // Multer configuration for image uploads
 const storage = multer.diskStorage({
@@ -54,11 +54,7 @@ const writeData = async (data) => {
   await fs.writeFile(DATA_PATH, JSON.stringify(data, null, 2));
 };
 
-const validateQuestion = (q) => {
-  return q.description && q.a && q.b && q.c && q.d &&
-    q.correct >= 1 && q.correct <= 4 &&
-    ['md', 'me', 'mf'].includes(q.type) && q.source;
-};
+
 
 // Public routes
 app.get('/api/fizika', async (req, res) => {
@@ -94,10 +90,6 @@ app.get('/api/admin/questions', async (req, res) => {
 
 app.post('/api/admin/questions', async (req, res) => {
   try {
-    if (!validateQuestion(req.body)) {
-      return res.status(400).json({ error: 'Invalid question data' });
-    }
-
     const data = await readData();
     const maxId = Math.max(...data.map(q => q.id), 0);
 
@@ -113,10 +105,6 @@ app.post('/api/admin/questions', async (req, res) => {
 
 app.put('/api/admin/questions/:id', async (req, res) => {
   try {
-    if (!validateQuestion(req.body)) {
-      return res.status(400).json({ error: 'Invalid question data' });
-    }
-
     const data = await readData();
     const index = data.findIndex(q => q.id === parseInt(req.params.id));
 

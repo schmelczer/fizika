@@ -25,7 +25,7 @@ async function ajaxLoad(type) {
   $("#loadingGif").show();
 
   let result = "";
-  
+
   try {
     if (type == 1) {
       var source =
@@ -117,11 +117,11 @@ function showCorrect(id, correctAns) {
   teszt(id, correctAns);
   eval(
     "$('" +
-      "#label" +
-      id +
-      ".rad" +
-      correctAns +
-      "').css('background-color', '#C6FF8C');"
+    "#label" +
+    id +
+    ".rad" +
+    correctAns +
+    "').css('background-color', '#C6FF8C');"
   );
   $("#state").html("Helyes válaszok bejelölve!");
   $("#state2").html(
@@ -155,20 +155,20 @@ function teszt(id, correctAns) {
       );
       eval(
         "localStorage.teszt" +
-          numberOfPreviousTests +
-          "date = '" +
-          datum.toLocaleDateString() +
-          "'"
+        numberOfPreviousTests +
+        "date = '" +
+        datum.toLocaleDateString() +
+        "'"
       );
       eval(
         "localStorage.teszt" + numberOfPreviousTests + "time = '" + ido + "'"
       );
       eval(
         "localStorage.teszt" +
-          numberOfPreviousTests +
-          "total = '" +
-          totalPoints +
-          "'"
+        numberOfPreviousTests +
+        "total = '" +
+        totalPoints +
+        "'"
       );
       startTimer = 0;
       timer = 0;
@@ -218,21 +218,21 @@ function eredmeny() {
         var isGood = eval(localString);
         $("#ered tr:last").after(
           "<tr><td>" +
-            i +
-            ".</td><td>" +
-            eval(datumString) +
-            "</td><td>" +
-            eval(timeString) +
-            " perc</td>" +
-            "<td style='color: hsl(" +
-            isGood +
-            ",100%,50%);''> <b>" +
-            eval(localString) +
-            "%</b></td><td>" +
-            Math.round((eval(localString) * eval(totalString)) / 100) +
-            "/" +
-            eval(totalString) +
-            " pont</td></tr>"
+          i +
+          ".</td><td>" +
+          eval(datumString) +
+          "</td><td>" +
+          eval(timeString) +
+          " perc</td>" +
+          "<td style='color: hsl(" +
+          isGood +
+          ",100%,50%);''> <b>" +
+          eval(localString) +
+          "%</b></td><td>" +
+          Math.round((eval(localString) * eval(totalString)) / 100) +
+          "/" +
+          eval(totalString) +
+          " pont</td></tr>"
         );
       }
     } else {
@@ -290,7 +290,6 @@ $(document).ready(function () {
     $("#fooldal").hide();
   });
   $("#beredmenyek").click(function () {
-    //eredmeny();
     $("#bfooldal").css("font-weight", "400");
     $("#bteszt").css("font-weight", "400");
     $("#beredmenyek").css("font-weight", "700");
