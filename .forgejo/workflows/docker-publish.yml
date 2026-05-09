@@ -1,0 +1,63 @@
+name: Build and Publish Docker Image
+
+on:
+  push:
+    branches: ['main']
+    tags: ['v*']
+  pull_request:
+    branches: ['main']
+  workflow_dispatch:
+
+env:
+  IMAGE_NAME: ${{ forgejo.repository }}/fizika-admin
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-docker
+
+    steps:
+      - name: Checkout repository
+        uses: https://code.forgejo.org/actions/checkout@v4
+
+      - name: Extract registry host
+        id: registry
+        run: echo "host=$(echo '${{ forgejo.server_url }}' | sed 's|https\?://||')" >> "$GITHUB_OUTPUT"
+
+      - name: Log into Forgejo registry
+        if: forgejo.event_name != 'pull_request'
+        run: echo "${{ secrets.FORGEJO_TOKEN }}" | docker login "${{ steps.registry.outputs.host }}" -u "${{ forgejo.actor }}" --password-stdin
+
+      - name: Build Docker image
+        run: |
+          IMAGE="${{ steps.registry.outputs.host }}/$(echo "${{ env.IMAGE_NAME }}" | tr '[:upper:]' '[:lower:]')"
+          SHA_SHORT="$(echo "${{ forgejo.sha }}" | cut -c1-12)"
+          TAG_ARGS="-t ${IMAGE}:sha-${SHA_SHORT}"
+
+          if [ "${{ forgejo.ref }}" = "refs/heads/main" ]; then
+            TAG_ARGS="${TAG_ARGS} -t ${IMAGE}:main -t ${IMAGE}:latest"
+          fi
+
+          if [ "${{ forgejo.ref_type }}" = "tag" ]; then
+            REF_NAME="${{ forgejo.ref_name }}"
+            TAG_ARGS="${TAG_ARGS} -t ${IMAGE}:${REF_NAME}"
+
+            if echo "$REF_NAME" | grep -Eq '^v[0-9]+\.[0-9]+\.[0-9]+$'; then
+              VERSION="${REF_NAME#v}"
+              MAJOR_MINOR="$(echo "$VERSION" | cut -d. -f1,2)"
+              MAJOR="$(echo "$VERSION" | cut -d. -f1)"
+              TAG_ARGS="${TAG_ARGS} -t ${IMAGE}:${VERSION} -t ${IMAGE}:${MAJOR_MINOR} -t ${IMAGE}:${MAJOR}"
+            fi
+          fi
+
+          docker build \
+            --label "org.opencontainers.image.source=${{ forgejo.server_url }}/${{ forgejo.repository }}" \
+            --label "org.opencontainers.image.revision=${{ forgejo.sha }}" \
+            --label "org.opencontainers.image.created=$(date -u +'%Y-%m-%dT%H:%M:%SZ')" \
+            ${TAG_ARGS} \
+            ./backend
+
+          echo "IMAGE=${IMAGE}" >> "$GITHUB_ENV"
+
+      - name: Push Docker image
+        if: forgejo.event_name != 'pull_request'
+        run: docker push --all-tags "$IMAGE"
