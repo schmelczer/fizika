@@ -25,7 +25,7 @@ jobs:
 
       - name: Copy frontend to host pages mount
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        run: |
-          apt update && apt install -y rsync
-          mkdir -p /pages
-          rsync -a --delete frontend/ /pages/fizika
+        uses: http://forgejo:3000/andras/ci-actions/deploy-pages@main
+        with:
+          source: frontend
+          target: fizika
