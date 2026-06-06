@@ -37,6 +37,14 @@ app.use(
 app.use(express.json({ limit: "100mb" }));
 app.use(express.static("public"));
 
+// Serve the official Plausible tracker (npm: @plausible-analytics/tracker) from node_modules.
+const plausibleTrackerPath =
+  require.resolve("@plausible-analytics/tracker/plausible.js");
+
+app.get("/vendor/plausible.js", (req, res) => {
+  res.sendFile(plausibleTrackerPath);
+});
+
 // File paths
 const DATA_PATH =
   process.env.DATA_PATH || path.join(__dirname, "../frontend/fizika.json");

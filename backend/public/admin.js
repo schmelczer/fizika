@@ -1,11 +1,5 @@
 const API_BASE = window.location.origin;
 
-window.plausible =
-  window.plausible ||
-  function () {
-    (window.plausible.q = window.plausible.q || []).push(arguments);
-  };
-
 // Escape user-supplied text before interpolating it into HTML, to prevent XSS.
 function escapeHtml(value) {
   return String(value).replace(
