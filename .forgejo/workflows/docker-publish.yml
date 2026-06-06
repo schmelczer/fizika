@@ -20,6 +20,6 @@ jobs:
         uses: http://forgejo:3000/andras/ci-actions/docker-publish@main
         with:
           context: ./backend
-          image-suffix: /fizika-admin
+          image-suffix: -admin
           push: ${{ github.event_name != 'pull_request' }}
           token: ${{ secrets.FORGEJO_PACKAGE_TOKEN }}
