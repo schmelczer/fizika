@@ -1,4 +1,4 @@
-import { init } from "./plausible.js";
+import { init } from "./vendored.js";
 
 init({
   domain: "fizika.schmelczer.dev",

@@ -7,5 +7,5 @@ backend/package-lock.json
 
 # Vendored / generated assets
 frontend/js/jquery.min.js
-frontend/js/plausible.js
+frontend/js/vendored.js
 *.min.js

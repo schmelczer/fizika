@@ -39,9 +39,9 @@ app.use(express.static("public"));
 
 // Serve the official Plausible tracker (npm: @plausible-analytics/tracker) from node_modules.
 const plausibleTrackerPath =
-  require.resolve("@plausible-analytics/tracker/plausible.js");
+  require.resolve("@plausible-analytics/tracker/vendored.js");
 
-app.get("/vendor/plausible.js", (req, res) => {
+app.get("/vendor/vendored.js", (req, res) => {
   res.sendFile(plausibleTrackerPath);
 });
 
