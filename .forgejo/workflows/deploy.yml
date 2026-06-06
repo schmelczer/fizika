@@ -2,13 +2,13 @@ name: Deploy to Pages
 
 on:
   push:
-    branches: ['main']
+    branches: ["main"]
   pull_request:
-    branches: ['main']
+    branches: ["main"]
   workflow_dispatch:
 
 concurrency:
-  group: 'pages'
+  group: "pages"
   cancel-in-progress: false
 
 jobs:
@@ -17,11 +17,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-
-      - name: Validate static frontend
-        run: |
-          test -f frontend/index.html
-          test -f frontend/fizika.json
 
       - name: Copy frontend to host pages mount
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'

@@ -1,0 +1,30 @@
+name: Test
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: docker
+
+    steps:
+      - name: Checkout repository
+        uses: https://code.forgejo.org/actions/checkout@v4
+
+      - name: Install root tooling
+        run: npm ci
+
+      - name: Check formatting
+        run: npm run format:check
+
+      - name: Install backend dependencies
+        run: npm ci
+        working-directory: backend
+
+      - name: Run backend tests
+        run: npm test
+        working-directory: backend
