@@ -4,7 +4,7 @@
   "description": "Static frontend for the Fizika practice app",
   "private": true,
   "scripts": {
-    "vendor": "cp node_modules/@plausible-analytics/tracker/vendored.js js/vendored.js",
+    "vendor": "cp node_modules/@plausible-analytics/tracker/plausible.js js/vendored.js",
     "postinstall": "npm run vendor"
   },
   "dependencies": {
