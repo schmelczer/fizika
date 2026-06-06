@@ -1,0 +1,13 @@
+{
+  "name": "fizika-frontend",
+  "version": "1.0.0",
+  "description": "Static frontend for the Fizika practice app",
+  "private": true,
+  "scripts": {
+    "vendor": "cp node_modules/@plausible-analytics/tracker/plausible.js js/plausible.js",
+    "postinstall": "npm run vendor"
+  },
+  "dependencies": {
+    "@plausible-analytics/tracker": "^0.4.5"
+  }
+}
