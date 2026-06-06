@@ -25,7 +25,7 @@ jobs:
 
       - name: Log into Forgejo registry
         if: forgejo.event_name != 'pull_request'
-        run: echo "${{ secrets.FORGEJO_TOKEN }}" | docker login "${{ steps.registry.outputs.host }}" -u "${{ forgejo.actor }}" --password-stdin
+        run: echo "${{ secrets.FORGEJO_PACKAGE_TOKEN }}" | docker login "${{ steps.registry.outputs.host }}" -u "${{ forgejo.actor }}" --password-stdin
 
       - name: Build Docker image
         run: |
