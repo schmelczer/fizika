@@ -200,7 +200,7 @@ const initializeMonthDropdown = (selectedYear) => {
     // Convert to sorted array and create options
     const uniqueMonths = Array.from(monthSet).sort();
     uniqueMonths.forEach((month) => {
-      monthOptions += `<option value="${month}" class="fdynamic">${getMonthLabel(month)}</option>`;
+      monthOptions += `<option value="${month}">${getMonthLabel(month)}</option>`;
     });
   } else {
     // Extract year from selected value (e.g., "2024/" -> "2024")
@@ -220,44 +220,39 @@ const initializeMonthDropdown = (selectedYear) => {
     // Special handling for known year patterns
     if (year === "2006") {
       // Preserve existing 2006 logic but add any new months found
-      monthOptions +=
-        '<option value="1" class="f2006">Február-Március</option>';
-      monthOptions += '<option value="2" class="f2006">Május-Június</option>';
-      monthOptions +=
-        '<option value="3" class="f2006">Október-November</option>';
+      monthOptions += '<option value="1">Február-Március</option>';
+      monthOptions += '<option value="2">Május-Június</option>';
+      monthOptions += '<option value="3">Október-November</option>';
 
       // Add any dynamic months not covered by the standard ones
       uniqueMonths.forEach((month) => {
         if (!["1", "2", "3"].includes(month)) {
-          monthOptions += `<option value="${month}" class="f2006">${getMonthLabel(month)}</option>`;
+          monthOptions += `<option value="${month}">${getMonthLabel(month)}</option>`;
         }
       });
     } else if (year === "2016") {
       // Preserve existing 2016 logic but add any new months found
-      monthOptions += '<option value="1" class="f">Május-Június</option>';
-      monthOptions += '<option value="2" class="f">Október-November</option>';
-      monthOptions +=
-        '<option value="m1" class="f2016">1. Mintafeladatsor</option>';
-      monthOptions +=
-        '<option value="m2" class="f2016">2. Mintafeladatsor</option>';
-      monthOptions +=
-        '<option value="m3" class="f2016">3. Mintafeladatsor</option>';
+      monthOptions += '<option value="1">Május-Június</option>';
+      monthOptions += '<option value="2">Október-November</option>';
+      monthOptions += '<option value="m1">1. Mintafeladatsor</option>';
+      monthOptions += '<option value="m2">2. Mintafeladatsor</option>';
+      monthOptions += '<option value="m3">3. Mintafeladatsor</option>';
 
       // Add any dynamic months not covered
       uniqueMonths.forEach((month) => {
         if (!["1", "2", "m1", "m2", "m3"].includes(month)) {
-          monthOptions += `<option value="${month}" class="f">${getMonthLabel(month)}</option>`;
+          monthOptions += `<option value="${month}">${getMonthLabel(month)}</option>`;
         }
       });
     } else if (year === "2017") {
       // Preserve existing 2017 logic but add any new months found
-      monthOptions += '<option value="1" class="f">Május-Június</option>';
-      monthOptions += '<option value="2" class="f">Október-November</option>';
+      monthOptions += '<option value="1">Május-Június</option>';
+      monthOptions += '<option value="2">Október-November</option>';
 
       // Add any dynamic months
       uniqueMonths.forEach((month) => {
         if (!["1", "2"].includes(month)) {
-          monthOptions += `<option value="${month}" class="f">${getMonthLabel(month)}</option>`;
+          monthOptions += `<option value="${month}">${getMonthLabel(month)}</option>`;
         }
       });
     } else {
@@ -266,16 +261,16 @@ const initializeMonthDropdown = (selectedYear) => {
       const hasStandard2 = uniqueMonths.includes("2");
 
       if (hasStandard1) {
-        monthOptions += '<option value="1" class="f">Május-Június</option>';
+        monthOptions += '<option value="1">Május-Június</option>';
       }
       if (hasStandard2) {
-        monthOptions += '<option value="2" class="f">Október-November</option>';
+        monthOptions += '<option value="2">Október-November</option>';
       }
 
       // Add any non-standard months
       uniqueMonths.forEach((month) => {
         if (!["1", "2"].includes(month)) {
-          monthOptions += `<option value="${month}" class="f">${getMonthLabel(month)}</option>`;
+          monthOptions += `<option value="${month}">${getMonthLabel(month)}</option>`;
         }
       });
     }

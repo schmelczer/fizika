@@ -190,15 +190,6 @@ function teszt(id, correctAns) {
   }
 }
 
-function scrollTo(where) {
-  $("html, body").animate(
-    {
-      scrollTop: $(where).offset().top - 100,
-    },
-    1000,
-  );
-}
-
 function howMany() {
   var localString = "localStorage.teszt";
   numberOfPreviousTests = 1; //number of previous tests+1
@@ -266,28 +257,13 @@ setInterval(function () {
 $(document).ready(function () {
   eredmeny();
 
-  // Initialize year dropdown with dynamic years from question data
-  if (typeof initializeYearDropdown === "function") {
-    initializeYearDropdown().then(() => {
-      // Initialize month dropdown for default "all" year selection
-      if (typeof initializeMonthDropdown === "function") {
-        initializeMonthDropdown("all/");
-      }
-    });
-  }
+  // Populate the year dropdown, then the month dropdown for the default "all".
+  initializeYearDropdown().then(() => initializeMonthDropdown("all/"));
 
   $(window).on("mousewheel", function () {
     $("body").stop();
   });
 
-  $(document).ajaxError(function (event, jqxhr, settings) {
-    if (!settings.secondExec) {
-      settings.secondExec = true;
-      setTimeout(function () {
-        $.ajax(settings);
-      }, 500);
-    }
-  });
   aspect();
 
   $("#bfooldal").click(function () {
@@ -333,36 +309,7 @@ $(document).ready(function () {
     isSearch = false;
   });
   $("#evszam").change(function () {
-    const selectedYear = $("#evszam").val();
-
-    // Initialize month dropdown dynamically based on selected year
-    if (typeof initializeMonthDropdown === "function") {
-      initializeMonthDropdown(selectedYear);
-    } else {
-      // Fallback to original logic if dynamic function not available
-      if (selectedYear == "2006/") {
-        $(".f2006").show();
-        $(".f2016").hide();
-        $(".f").hide();
-        $(".fnem17").hide();
-      } else if (selectedYear == "2016/") {
-        $(".f2006").hide();
-        $(".f2016").show();
-        $(".f").show();
-        $(".fnem17").show();
-      } else if (selectedYear == "2017/") {
-        $(".f2006").hide();
-        $(".f2016").hide();
-        $(".f").show();
-        $(".fnem17").hide();
-      } else {
-        $(".f2006").hide();
-        $(".f2016").hide();
-        $(".f").show();
-        $(".fnem17").show();
-      }
-    }
-
+    initializeMonthDropdown($("#evszam").val());
     $("#honap").val("all");
   });
 
