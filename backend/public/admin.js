@@ -6,6 +6,21 @@ window.plausible =
     (window.plausible.q = window.plausible.q || []).push(arguments);
   };
 
+// Escape user-supplied text before interpolating it into HTML, to prevent XSS.
+function escapeHtml(value) {
+  return String(value).replace(
+    /[&<>"']/g,
+    (ch) =>
+      ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;",
+      })[ch],
+  );
+}
+
 document.addEventListener("DOMContentLoaded", function () {
   loadQuestions();
   loadImages();
@@ -13,23 +28,31 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function setupEventListeners() {
-  document.querySelectorAll('.tab[data-tab]').forEach(tab => {
-    tab.addEventListener('click', (e) => {
+  document.querySelectorAll(".tab[data-tab]").forEach((tab) => {
+    tab.addEventListener("click", (e) => {
       switchTab(e.target.dataset.tab);
     });
   });
 
-  document.getElementById('addQuestionBtn').addEventListener('click', showAddQuestionModal);
+  document
+    .getElementById("addQuestionBtn")
+    .addEventListener("click", showAddQuestionModal);
 
-  document.getElementById('imageUpload').addEventListener('change', uploadImage);
+  document
+    .getElementById("imageUpload")
+    .addEventListener("change", uploadImage);
 
-  document.getElementById('closeModalBtn').addEventListener('click', closeModal);
-  document.getElementById('cancelBtn').addEventListener('click', closeModal);
+  document
+    .getElementById("closeModalBtn")
+    .addEventListener("click", closeModal);
+  document.getElementById("cancelBtn").addEventListener("click", closeModal);
 
-  document.getElementById('questionForm').addEventListener('submit', saveQuestion);
+  document
+    .getElementById("questionForm")
+    .addEventListener("submit", saveQuestion);
 
-  document.getElementById('questionModal').addEventListener('click', (e) => {
-    if (e.target.id === 'questionModal') {
+  document.getElementById("questionModal").addEventListener("click", (e) => {
+    if (e.target.id === "questionModal") {
       closeModal();
     }
   });
@@ -70,39 +93,37 @@ function displayQuestions(questions) {
     .map(
       (q) => `
         <div class="question-item">
-            <h4>ID: ${q.id} - ${q.source}</h4>
-            <p><strong>Kérdés:</strong> ${q.description.substring(
-        0,
-        100
-      )}...</p>
-            <p><strong>Típus:</strong> ${q.type
-        } | <strong>Helyes válasz:</strong> ${["A", "B", "C", "D"][q.correct - 1]
-        }</p>
+            <h4>ID: ${q.id} - ${escapeHtml(q.source)}</h4>
+            <p><strong>Kérdés:</strong> ${escapeHtml(
+              q.description.substring(0, 100),
+            )}...</p>
+            <p><strong>Típus:</strong> ${escapeHtml(q.type)} | <strong>Helyes válasz:</strong> ${
+              ["A", "B", "C", "D"][q.correct - 1]
+            }</p>
             <div class="question-actions">
                 <button data-edit-id="${q.id}">Szerkesztés</button>
                 <button class="danger" data-delete-id="${q.id}">Törlés</button>
             </div>
         </div>
-    `
+    `,
     )
     .join("");
 
-  container.querySelectorAll('[data-edit-id]').forEach(btn => {
-    btn.addEventListener('click', (e) => {
+  container.querySelectorAll("[data-edit-id]").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
       editQuestion(parseInt(e.target.dataset.editId));
     });
   });
 
-  container.querySelectorAll('[data-delete-id]').forEach(btn => {
-    btn.addEventListener('click', (e) => {
+  container.querySelectorAll("[data-delete-id]").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
       deleteQuestion(parseInt(e.target.dataset.deleteId));
     });
   });
 }
 
 function showAddQuestionModal() {
-  document.getElementById("modalTitle").textContent =
-    "Új kérdés hozzáadása";
+  document.getElementById("modalTitle").textContent = "Új kérdés hozzáadása";
   document.getElementById("questionForm").reset();
   document.getElementById("questionId").value = "";
   document.getElementById("questionModal").style.display = "block";
@@ -126,11 +147,9 @@ async function editQuestion(id) {
         document.getElementById("questionB").value = question.b;
         document.getElementById("questionC").value = question.c;
         document.getElementById("questionD").value = question.d;
-        document.getElementById("questionCorrect").value =
-          question.correct;
+        document.getElementById("questionCorrect").value = question.correct;
         document.getElementById("questionType").value = question.type;
-        document.getElementById("questionImage").value =
-          question.image || "";
+        document.getElementById("questionImage").value = question.image || "";
         document.getElementById("questionModal").style.display = "block";
       }
     }
@@ -166,7 +185,7 @@ async function saveQuestion(event) {
         method: isEdit ? "PUT" : "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
-      }
+      },
     );
 
     if (response.ok) {
@@ -178,7 +197,7 @@ async function saveQuestion(event) {
       showAlert(
         "questionsAlert",
         error.error || "Hiba a mentés során",
-        "danger"
+        "danger",
       );
     }
   } catch (error) {
@@ -190,10 +209,9 @@ async function deleteQuestion(id) {
   if (!confirm("Biztosan törölni szeretnéd ezt a kérdést?")) return;
 
   try {
-    const response = await fetch(
-      `${API_BASE}/api/admin/questions/${id}`,
-      { method: "DELETE" }
-    );
+    const response = await fetch(`${API_BASE}/api/admin/questions/${id}`, {
+      method: "DELETE",
+    });
     if (response.ok) {
       loadQuestions();
       showAlert("questionsAlert", "Kérdés törölve!", "success");
@@ -226,16 +244,20 @@ function displayImages(images) {
     .map(
       (image) => `
         <div class="image-item">
-            <img src="${API_BASE}/api/pics/${image}" alt="${image}">
-            <p>${image}</p>
-            <button class="danger" data-delete-image="${image}">Törlés</button>
+            <img src="${API_BASE}/api/pics/${encodeURIComponent(
+              image,
+            )}" alt="${escapeHtml(image)}">
+            <p>${escapeHtml(image)}</p>
+            <button class="danger" data-delete-image="${escapeHtml(
+              image,
+            )}">Törlés</button>
         </div>
-    `
+    `,
     )
     .join("");
 
-  container.querySelectorAll('[data-delete-image]').forEach(btn => {
-    btn.addEventListener('click', (e) => {
+  container.querySelectorAll("[data-delete-image]").forEach((btn) => {
+    btn.addEventListener("click", (e) => {
       deleteImage(e.target.dataset.deleteImage);
     });
   });
@@ -265,7 +287,7 @@ async function uploadImage() {
       showAlert(
         "imagesAlert",
         error.error || "Hiba a feltöltés során",
-        "danger"
+        "danger",
       );
     }
   } catch (error) {
@@ -281,7 +303,7 @@ async function deleteImage(filename) {
       `${API_BASE}/api/admin/images/${encodeURIComponent(filename)}`,
       {
         method: "DELETE",
-      }
+      },
     );
 
     if (response.ok) {
