@@ -1,7 +1,6 @@
 var isSearch = false;
 var totalPoints = 0;
-var currentPoints = 0;
-var correctAnswersGiven = 0;
+var loadedQuestions = [];
 var timer = 0;
 var startTimer = 0;
 var reviewMode = 0;
@@ -17,7 +16,7 @@ function aspect() {
 async function ajaxLoad(type) {
   reviewMode = 0;
   totalPoints = 0;
-  currentPoints = 0;
+  loadedQuestions = [];
   $("#state").html("");
   $("#state2").html("");
   $("#percentage").html("");
@@ -92,6 +91,8 @@ async function ajaxLoad(type) {
     ) {
       $("#megoldas").show();
       $("#state").html("Feladatok sikeresen letöltve!");
+      startTimer = 1;
+      timer = 0;
     }
   } catch (error) {
     $("#loadingGif").hide();
@@ -116,78 +117,80 @@ async function ajaxLoad(type) {
   }
 }
 
-function showCorrect(id, correctAns) {
-  teszt(id, correctAns);
-  eval(
-    "$('" +
-      "#label" +
-      id +
-      ".rad" +
-      correctAns +
-      "').css('background-color', '#C6FF8C');",
-  );
+// Colour a single question green/red depending on whether the user selected
+// its correct answer, and report whether they got it right.
+function gradeQuestion(question) {
+  var div = "#feladat" + question.id;
+  var selected = "#form" + question.id + " #rad" + question.correct;
+  var isCorrect = $(selected).is(":checked");
+  $(div).animate({ backgroundColor: isCorrect ? "#C6FF8C" : "#FF808C" }, 1100);
+  return isCorrect;
+}
+
+// Grade every question currently on screen and return the score as a string
+// percentage (e.g. "66.67"). Grading the whole known set in one pass replaces
+// the old per-question click handlers, which accumulated across loads and
+// could save bogus results.
+function scoreLoadedQuestions() {
+  var correctAnswersGiven = 0;
+  loadedQuestions.forEach(function (question) {
+    if (gradeQuestion(question)) correctAnswersGiven++;
+  });
+  var percentage = (correctAnswersGiven / totalPoints) * 100;
+  percentage = Math.round(percentage * 100) / 100;
+  return percentage.toFixed(2);
+}
+
+// "Kiértékelés": grade the answers and, unless we are already reviewing, save
+// the result once.
+function evaluate() {
+  if (!loadedQuestions.length) return;
+  var percentage = scoreLoadedQuestions();
+  $("#percentage").html("Eredmény: " + percentage + "%");
+  $("#state").html("Válaszok leellenőrizve!");
+
+  if (isLocal && !reviewMode) {
+    saveResult(percentage);
+    reviewMode = 1;
+  }
+}
+
+// "Helyes megoldások": reveal the correct answers. This is a review action, so
+// we enter review mode *before* grading to guarantee it can never overwrite a
+// previously saved result.
+function showCorrect() {
+  if (!loadedQuestions.length) return;
+  reviewMode = 1;
+  var percentage = scoreLoadedQuestions();
+  loadedQuestions.forEach(function (question) {
+    $("#label" + question.id + ".rad" + question.correct).css(
+      "background-color",
+      "#C6FF8C",
+    );
+  });
+  $("#percentage").html("Eredmény: " + percentage + "%");
   $("#state").html("Helyes válaszok bejelölve!");
+  $("#state2").show();
   $("#state2").html(
     "(Ellenőrző mód, az itteni eredményeid nem kerülnek elmentésre, a módból való kilépéshez tölts be egy új tesztsort!)",
   );
 }
 
-function teszt(id, correctAns) {
-  var div = "#feladat" + id;
-  var correct = "#form" + id + " #rad" + correctAns;
-  var isCorrect = $(correct).is(":checked");
-  currentPoints++;
-  if (isCorrect) {
-    $(div).animate({ backgroundColor: "#C6FF8C" }, 1100);
-    correctAnswersGiven++;
-  } else {
-    $(div).animate({ backgroundColor: "#FF808C" }, 1100);
-  }
-  if (currentPoints >= totalPoints) {
-    var percentage = (correctAnswersGiven / totalPoints) * 100;
-    percentage = Math.round(percentage * 100) / 100;
-    percentage = percentage.toFixed(2);
-    $("#percentage").html("Eredmény: " + percentage + "%");
-    $("#state").html("Válaszok leellenőrizve!");
-    if (isLocal && !reviewMode) {
-      var datum = new Date();
-      var ido = Math.round(timer / 60);
-      eval(
-        "localStorage.teszt" +
-          numberOfPreviousTests +
-          " = '" +
-          percentage +
-          "'",
-      );
-      eval(
-        "localStorage.teszt" +
-          numberOfPreviousTests +
-          "date = '" +
-          datum.toLocaleDateString() +
-          "'",
-      );
-      eval(
-        "localStorage.teszt" + numberOfPreviousTests + "time = '" + ido + "'",
-      );
-      eval(
-        "localStorage.teszt" +
-          numberOfPreviousTests +
-          "total = '" +
-          totalPoints +
-          "'",
-      );
-      startTimer = 0;
-      timer = 0;
-      $("#state2").show();
-      $("#state2").html(
-        "Eredményed mentésre került! Ellenőrző módba belépve az eredményeid nem kerülnek tárolásra. A módból való kilépéshez tölts be egy új tesztsort!",
-      );
-      eredmeny();
-      reviewMode = 1;
-    }
-    currentPoints = 0;
-    correctAnswersGiven = 0;
-  }
+function saveResult(percentage) {
+  var datum = new Date();
+  var ido = Math.round(timer / 60);
+  localStorage["teszt" + numberOfPreviousTests] = percentage;
+  localStorage["teszt" + numberOfPreviousTests + "date"] =
+    datum.toLocaleDateString();
+  localStorage["teszt" + numberOfPreviousTests + "time"] = ido;
+  localStorage["teszt" + numberOfPreviousTests + "total"] = totalPoints;
+  startTimer = 0;
+  timer = 0;
+  $("#state2").show();
+  $("#state2").html(
+    "Eredményed mentésre került! Ellenőrző módba belépve az eredményeid nem kerülnek tárolásra. A módból való kilépéshez tölts be egy új tesztsort!",
+  );
+  eredmeny();
 }
 
 function howMany() {
@@ -337,6 +340,14 @@ $(document).ready(function () {
   });
   $("#load").click(function (event) {
     ajaxLoad(isSearch ? 1 : 3);
+  });
+  $("#ans").click(function (event) {
+    event.preventDefault();
+    evaluate();
+  });
+  $("#cAns").click(function (event) {
+    event.preventDefault();
+    showCorrect();
   });
   $(".scroll").click(function () {
     $("body").animate(

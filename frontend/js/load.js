@@ -72,13 +72,24 @@ const loadQuestions = async (
     );
   }
 
-  resultHtml = "";
-
   currentQuestions = currentQuestions.slice(0, questionCount);
+
+  // Remember the exact set being shown. The two action buttons ("Kiértékelés"
+  // and "Helyes megoldások") are bound once in fizika.js and grade this whole
+  // set in a single pass. Previously each question injected its own #ans/#cAns
+  // click handler; those were never removed, so they piled up across loads and
+  // ended up grading stale (already-removed) questions, saving bogus 0%
+  // results over the user's history.
+  loadedQuestions = currentQuestions.map(({ id, correct }) => ({
+    id: Number(id),
+    correct: Number(correct),
+  }));
+  totalPoints = loadedQuestions.length;
+
+  let resultHtml = "";
   currentQuestions.forEach(
-    ({ id, source, description, a, b, c, d, correct, image }, i) => {
+    ({ id, source, description, a, b, c, d, image }, i) => {
       const qid = Number(id);
-      const correctAnswer = Number(correct);
       const safeImage = image ? encodeURIComponent(image) : "";
       resultHtml += `
       <div class="feladat card" id="feladat${qid}">
@@ -104,31 +115,15 @@ const loadQuestions = async (
               : ""
           }
         </form>
-        <script type="text/javascript">
-          $(document).ready(function(){
-              totalPoints++;
-              $("#ans").click(function(event){
-                  event.preventDefault();
-                  teszt(${qid}, ${correctAnswer});
-              });
-              $("#cAns").click(function(event){
-                  event.preventDefault();
-                  showCorrect(${qid}, ${correctAnswer});
-              });
-          });
-        </script>
       </div>
       `;
     },
   );
 
-  resultHtml +=
-    currentQuestions.length === 0
-      ? '<div class="buttonwrapper"><b style="font-size: 2rem;">Nem található a keresésnek megfelelő feladat!</b></div>'
-      : `<script type="text/javascript">
-            startTimer = 1;
-            timer = 0;
-          </script>`;
+  if (currentQuestions.length === 0) {
+    resultHtml =
+      '<div class="buttonwrapper"><b style="font-size: 2rem;">Nem található a keresésnek megfelelő feladat!</b></div>';
+  }
 
   return resultHtml;
 };
