@@ -29,10 +29,13 @@ async function ajaxLoad(type) {
   try {
     if (type == 1) {
       var source =
-        "^" + $("#evszam").val() + $("#honap").val() + $("#feladat").val() + "$";
+        "^" +
+        $("#evszam").val() +
+        $("#honap").val() +
+        $("#feladat").val() +
+        "$";
       for (var i = 0; i <= 3; i++) {
         source = source.replace("all", ".*");
-        console.log(source);
       }
       result = await loadQuestions(true, undefined, source, 1000000);
     } else if (type == 2) {
@@ -56,7 +59,7 @@ async function ajaxLoad(type) {
           "v",
         ],
         undefined,
-        15
+        15,
       );
     } else {
       var NOQ = $("#numberof").val() ? $("#numberof").val() : 15;
@@ -109,7 +112,7 @@ async function ajaxLoad(type) {
       </div>
     `);
     $("#state").html("Hiba a feladatok betöltésekor");
-    console.error('Quiz loading error:', error);
+    console.error("Quiz loading error:", error);
   }
 }
 
@@ -117,15 +120,15 @@ function showCorrect(id, correctAns) {
   teszt(id, correctAns);
   eval(
     "$('" +
-    "#label" +
-    id +
-    ".rad" +
-    correctAns +
-    "').css('background-color', '#C6FF8C');"
+      "#label" +
+      id +
+      ".rad" +
+      correctAns +
+      "').css('background-color', '#C6FF8C');",
   );
   $("#state").html("Helyes válaszok bejelölve!");
   $("#state2").html(
-    "(Ellenőrző mód, az itteni eredményeid nem kerülnek elmentésre, a módból való kilépéshez tölts be egy új tesztsort!)"
+    "(Ellenőrző mód, az itteni eredményeid nem kerülnek elmentésre, a módból való kilépéshez tölts be egy új tesztsort!)",
   );
 }
 
@@ -140,7 +143,6 @@ function teszt(id, correctAns) {
   } else {
     $(div).animate({ backgroundColor: "#FF808C" }, 1100);
   }
-  console.log(currentPoints, totalPoints, correctAnswersGiven);
   if (currentPoints >= totalPoints) {
     var percentage = (correctAnswersGiven / totalPoints) * 100;
     percentage = Math.round(percentage * 100) / 100;
@@ -151,30 +153,34 @@ function teszt(id, correctAns) {
       var datum = new Date();
       var ido = Math.round(timer / 60);
       eval(
-        "localStorage.teszt" + numberOfPreviousTests + " = '" + percentage + "'"
+        "localStorage.teszt" +
+          numberOfPreviousTests +
+          " = '" +
+          percentage +
+          "'",
       );
       eval(
         "localStorage.teszt" +
-        numberOfPreviousTests +
-        "date = '" +
-        datum.toLocaleDateString() +
-        "'"
+          numberOfPreviousTests +
+          "date = '" +
+          datum.toLocaleDateString() +
+          "'",
       );
       eval(
-        "localStorage.teszt" + numberOfPreviousTests + "time = '" + ido + "'"
+        "localStorage.teszt" + numberOfPreviousTests + "time = '" + ido + "'",
       );
       eval(
         "localStorage.teszt" +
-        numberOfPreviousTests +
-        "total = '" +
-        totalPoints +
-        "'"
+          numberOfPreviousTests +
+          "total = '" +
+          totalPoints +
+          "'",
       );
       startTimer = 0;
       timer = 0;
       $("#state2").show();
       $("#state2").html(
-        "Eredményed mentésre került! Ellenőrző módba belépve az eredményeid nem kerülnek tárolásra. A módból való kilépéshez tölts be egy új tesztsort!"
+        "Eredményed mentésre került! Ellenőrző módba belépve az eredményeid nem kerülnek tárolásra. A módból való kilépéshez tölts be egy új tesztsort!",
       );
       eredmeny();
       reviewMode = 1;
@@ -189,7 +195,7 @@ function scrollTo(where) {
     {
       scrollTop: $(where).offset().top - 100,
     },
-    1000
+    1000,
   );
 }
 
@@ -208,7 +214,7 @@ function eredmeny() {
   if (isLocal) {
     if (typeof localStorage.teszt1 !== "undefined") {
       $("#tablazat").html(
-        '<table id="ered"><tr><th></th><th>Dátum</th><th>Időtartam</th><th>Eredmény</th><th>Pontszám</th></tr></table>'
+        '<table id="ered"><tr><th></th><th>Dátum</th><th>Időtartam</th><th>Eredmény</th><th>Pontszám</th></tr></table>',
       );
       for (var i = 1; i < numberOfPreviousTests; i++) {
         var localString = "localStorage.teszt" + i;
@@ -218,21 +224,21 @@ function eredmeny() {
         var isGood = eval(localString);
         $("#ered tr:last").after(
           "<tr><td>" +
-          i +
-          ".</td><td>" +
-          eval(datumString) +
-          "</td><td>" +
-          eval(timeString) +
-          " perc</td>" +
-          "<td style='color: hsl(" +
-          isGood +
-          ",100%,50%);''> <b>" +
-          eval(localString) +
-          "%</b></td><td>" +
-          Math.round((eval(localString) * eval(totalString)) / 100) +
-          "/" +
-          eval(totalString) +
-          " pont</td></tr>"
+            i +
+            ".</td><td>" +
+            eval(datumString) +
+            "</td><td>" +
+            eval(timeString) +
+            " perc</td>" +
+            "<td style='color: hsl(" +
+            isGood +
+            ",100%,50%);''> <b>" +
+            eval(localString) +
+            "%</b></td><td>" +
+            Math.round((eval(localString) * eval(totalString)) / 100) +
+            "/" +
+            eval(totalString) +
+            " pont</td></tr>",
         );
       }
     } else {
@@ -240,7 +246,7 @@ function eredmeny() {
     }
   } else {
     $("#tablazat").html(
-      "<h2>Sajnos a böngésződ nem támogatja ezt a funkciót, tölts le egy modernebbet vagy jelentkezz be!</h2>"
+      "<h2>Sajnos a böngésződ nem támogatja ezt a funkciót, tölts le egy modernebbet vagy jelentkezz be!</h2>",
     );
   }
 }
@@ -259,17 +265,17 @@ setInterval(function () {
 
 $(document).ready(function () {
   eredmeny();
-  
+
   // Initialize year dropdown with dynamic years from question data
-  if (typeof initializeYearDropdown === 'function') {
+  if (typeof initializeYearDropdown === "function") {
     initializeYearDropdown().then(() => {
       // Initialize month dropdown for default "all" year selection
-      if (typeof initializeMonthDropdown === 'function') {
-        initializeMonthDropdown('all/');
+      if (typeof initializeMonthDropdown === "function") {
+        initializeMonthDropdown("all/");
       }
     });
   }
-  
+
   $(window).on("mousewheel", function () {
     $("body").stop();
   });
@@ -328,9 +334,9 @@ $(document).ready(function () {
   });
   $("#evszam").change(function () {
     const selectedYear = $("#evszam").val();
-    
+
     // Initialize month dropdown dynamically based on selected year
-    if (typeof initializeMonthDropdown === 'function') {
+    if (typeof initializeMonthDropdown === "function") {
       initializeMonthDropdown(selectedYear);
     } else {
       // Fallback to original logic if dynamic function not available
@@ -356,7 +362,7 @@ $(document).ready(function () {
         $(".fnem17").show();
       }
     }
-    
+
     $("#honap").val("all");
   });
 
@@ -390,7 +396,7 @@ $(document).ready(function () {
       {
         scrollTop: $("#teszt").offset().top,
       },
-      3000
+      3000,
     );
   });
 });
@@ -419,28 +425,28 @@ $(document).ready(function () {
             Math.max(
               Math.min(
                 parseInt(g.pos * (g.end[0] - g.start[0]) + g.start[0]),
-                255
+                255,
               ),
-              0
+              0,
             ),
             Math.max(
               Math.min(
                 parseInt(g.pos * (g.end[1] - g.start[1]) + g.start[1]),
-                255
+                255,
               ),
-              0
+              0,
             ),
             Math.max(
               Math.min(
                 parseInt(g.pos * (g.end[2] - g.start[2]) + g.start[2]),
-                255
+                255,
               ),
-              0
+              0,
             ),
           ].join(",") +
           ")";
       };
-    }
+    },
   );
   function b(f) {
     var e;
@@ -448,16 +454,18 @@ $(document).ready(function () {
       return f;
     }
     if (
-      (e = /rgb\(\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})\s*\)/.exec(
-        f
-      ))
+      (e =
+        /rgb\(\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})\s*\)/.exec(
+          f,
+        ))
     ) {
       return [parseInt(e[1]), parseInt(e[2]), parseInt(e[3])];
     }
     if (
-      (e = /rgb\(\s*([0-9]+(?:\.[0-9]+)?)\%\s*,\s*([0-9]+(?:\.[0-9]+)?)\%\s*,\s*([0-9]+(?:\.[0-9]+)?)\%\s*\)/.exec(
-        f
-      ))
+      (e =
+        /rgb\(\s*([0-9]+(?:\.[0-9]+)?)\%\s*,\s*([0-9]+(?:\.[0-9]+)?)\%\s*,\s*([0-9]+(?:\.[0-9]+)?)\%\s*\)/.exec(
+          f,
+        ))
     ) {
       return [
         parseFloat(e[1]) * 2.55,
