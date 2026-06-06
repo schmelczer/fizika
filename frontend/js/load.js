@@ -106,14 +106,13 @@ const loadQuestions = async (
           <input type="radio" id="rad3" name="group">
           <label id="label${qid}" class="rad3">${sanitizeQuestionHtml(c)}</label>
           <br>
-          ${
-            d
-              ? `
+          ${d
+          ? `
           <input type="radio" id="rad4" name="group">
           <label id="label${qid}" class="rad4">${sanitizeQuestionHtml(d)}</label>
           <br>`
-              : ""
-          }
+          : ""
+        }
         </form>
       </div>
       `;
@@ -179,8 +178,8 @@ const initializeMonthDropdown = (selectedYear) => {
   const monthDropdown = document.getElementById("honap");
   if (!monthDropdown) return;
 
-  // Always include "Összes feladatsora" option
-  let monthOptions = '<option value="all">Összes feladatsora</option>';
+  // Always include "Összes feladatsor" option
+  let monthOptions = '<option value="all">Összes feladatsor</option>';
 
   if (selectedYear === "all/") {
     // Show all possible month patterns
