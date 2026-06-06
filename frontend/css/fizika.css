@@ -150,10 +150,6 @@ p:last-of-type {
   background-color: white;
   width: 63%;
 }
-.f2006,
-.f2016 {
-  display: none;
-}
 #load,
 #loadingGif {
   display: none;
