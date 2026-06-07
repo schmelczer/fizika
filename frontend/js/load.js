@@ -106,13 +106,14 @@ const loadQuestions = async (
           <input type="radio" id="rad3" name="group">
           <label id="label${qid}" class="rad3">${sanitizeQuestionHtml(c)}</label>
           <br>
-          ${d
-          ? `
+          ${
+            d
+              ? `
           <input type="radio" id="rad4" name="group">
           <label id="label${qid}" class="rad4">${sanitizeQuestionHtml(d)}</label>
           <br>`
-          : ""
-        }
+              : ""
+          }
         </form>
       </div>
       `;
