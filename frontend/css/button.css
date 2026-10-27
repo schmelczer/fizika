@@ -25,8 +25,11 @@
 }
 @media only screen and (max-width: 1000px) {
   .button {
-    font-size: 1.45em;
-    padding: 0.3em;
-    margin: 0.15em;
+    box-sizing: border-box;
+    max-width: 100%;
+    min-height: 44px;
+    font-size: 1.125rem;
+    padding: 0.75em;
+    margin: 0.25em 0;
   }
 }

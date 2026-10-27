@@ -29,16 +29,25 @@ input[type="radio"]:checked + label {
 }
 
 @media only screen and (max-width: 1000px) {
+  .card form {
+    display: grid;
+    grid-template-columns: 28px minmax(0, 1fr);
+    gap: 0.75em 0.5em;
+  }
+  .card form br {
+    display: none;
+  }
   input[type="radio"] {
-    width: 60px;
-    height: 60px;
+    height: 28px;
+    opacity: 1;
+    accent-color: #003366;
   }
-  input[type="radio"] + label {
-    margin-left: -60px;
-    padding-left: 60px;
-    background-size: 60px 60px;
-  }
+  input[type="radio"] + label,
   input[type="radio"]:checked + label {
-    background-size: 60px 60px;
+    margin: 0;
+    padding: 0;
+    background: none;
+    font-size: 1rem;
+    line-height: 1.6;
   }
 }
