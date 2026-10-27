@@ -95,7 +95,7 @@ const loadQuestions = async (
       <div class="feladat card" id="feladat${qid}">
         <h2 style="float: left;">${i + 1}.</h2><h2>${sanitizeQuestionHtml(source)}</h2>
         <pre>${sanitizeQuestionHtml(description)}</pre>
-        ${image ? `<img src="${API_BASE}/api/pics/${safeImage}" crossorigin="anonymous" onerror="this.src='pics/${safeImage}'"><br>` : ""}
+        ${image ? `<img src="${API_BASE}/api/pics/${safeImage}" crossorigin="anonymous" onerror="this.onerror=null; this.src='pics/${safeImage}'"><br>` : ""}
         <form id="form${qid}">
           <input type="radio" id="rad1" name="group">
           <label id="label${qid}" class="rad1">${sanitizeQuestionHtml(a)}</label>
