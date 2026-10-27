@@ -1,5 +1,10 @@
 let questions = null;
 
+const MAX_TOPIC_QUESTIONS = 100;
+const QUESTION_COUNT_ERROR = `A feladatok mennyisége 1 és ${MAX_TOPIC_QUESTIONS} közötti egész szám legyen!`;
+const isValidQuestionCount = (count) =>
+  Number.isInteger(count) && count >= 1 && count <= MAX_TOPIC_QUESTIONS;
+
 // Auto-detect API base URL
 const getApiBase = () => {
   const protocol = window.location.protocol;
@@ -57,6 +62,10 @@ const loadQuestions = async (
   sourceScheme,
   questionCount,
 ) => {
+  if (!isSearch && !isValidQuestionCount(questionCount)) {
+    throw new RangeError(QUESTION_COUNT_ERROR);
+  }
+
   await ensureQuestionsLoaded();
 
   let currentQuestions = questions.slice();
