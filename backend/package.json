@@ -7,6 +7,7 @@
     "start": "node server.js",
     "dev": "nodemon server.js",
     "validate:data": "node validate-question-bank.js",
+    "audit:data": "node audit-question-bank.js",
     "test": "node --test"
   },
   "dependencies": {
