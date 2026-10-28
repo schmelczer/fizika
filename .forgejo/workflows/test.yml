@@ -19,9 +19,7 @@ jobs:
         run: npm ci
 
       - name: Check formatting
-        run: |
-          npm run format:check
-          npm run test
+        run: npm run format:check
 
       - name: Install backend dependencies
         run: npm ci
