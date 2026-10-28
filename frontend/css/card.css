@@ -18,7 +18,18 @@ h2 {
   text-align: center;
   color: #0a0f14;
 }
-pre {
+.card fieldset {
+  border: 0;
+  padding: 0;
+  margin: 1.5em 0 0;
+  min-width: 0;
+}
+.card legend {
+  padding: 0;
+  margin-bottom: 1em;
+}
+pre,
+.card legend {
   text-align: justify;
   font-family: "Open sans", sans-serif;
   font-weight: 300;
@@ -45,7 +56,8 @@ img {
   h2 {
     font-size: 1.25rem;
   }
-  pre {
+  pre,
+  .card legend {
     font-size: 1rem;
     line-height: 1.6;
     text-align: left;

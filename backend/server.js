@@ -135,6 +135,11 @@ app.get("/api/admin/questions", async (req, res) => {
 app.post("/api/admin/questions", async (req, res) => {
   try {
     const data = await readData();
+    if (data.some((q) => q.source === req.body.source)) {
+      return res
+        .status(409)
+        .json({ error: "Source identifier already exists" });
+    }
     const maxId = Math.max(...data.map((q) => q.id), 0);
 
     const newQuestion = { id: maxId + 1, ...req.body };
@@ -156,7 +161,16 @@ app.put("/api/admin/questions/:id", async (req, res) => {
       return res.status(404).json({ error: "Question not found" });
     }
 
-    data[index] = { ...data[index], ...req.body };
+    const updatedQuestion = { ...data[index], ...req.body };
+    if (
+      data.some((q, i) => i !== index && q.source === updatedQuestion.source)
+    ) {
+      return res
+        .status(409)
+        .json({ error: "Source identifier already exists" });
+    }
+
+    data[index] = updatedQuestion;
     await writeData(data);
 
     res.json(data[index]);

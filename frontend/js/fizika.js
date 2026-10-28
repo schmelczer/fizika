@@ -14,6 +14,22 @@ function aspect() {
 }
 
 async function ajaxLoad(type) {
+  let topicQuestionCount = 15;
+  if (type != 1 && type != 2) {
+    const countInput = document.getElementById("numberof");
+    // Keep the empty-field default, but reject incomplete numeric input.
+    topicQuestionCount =
+      countInput.value === "" && !countInput.validity.badInput
+        ? 15
+        : countInput.valueAsNumber;
+    if (!isValidQuestionCount(topicQuestionCount)) {
+      countInput.setCustomValidity(QUESTION_COUNT_ERROR);
+      countInput.reportValidity();
+      return;
+    }
+    countInput.setCustomValidity("");
+  }
+
   reviewMode = 0;
   totalPoints = 0;
   loadedQuestions = [];
@@ -61,7 +77,6 @@ async function ajaxLoad(type) {
         15,
       );
     } else {
-      var NOQ = $("#numberof").val() ? $("#numberof").val() : 15;
       categories = [
         $("#mk").prop("checked") ? "mk" : "",
         $("#md").prop("checked") ? "md" : "",
@@ -79,7 +94,12 @@ async function ajaxLoad(type) {
         $("#cs").prop("checked") ? "cs" : "",
         $("#v").prop("checked") ? "v" : "",
       ];
-      result = await loadQuestions(false, categories, undefined, NOQ);
+      result = await loadQuestions(
+        false,
+        categories,
+        undefined,
+        topicQuestionCount,
+      );
     }
 
     $("#loadingGif").hide();
@@ -121,7 +141,7 @@ async function ajaxLoad(type) {
 // its correct answer, and report whether they got it right.
 function gradeQuestion(question) {
   var div = "#feladat" + question.id;
-  var selected = "#form" + question.id + " #rad" + question.correct;
+  var selected = `#question-${question.id}-answer-${question.correct}`;
   var isCorrect = $(selected).is(":checked");
   $(div).animate({ backgroundColor: isCorrect ? "#C6FF8C" : "#FF808C" }, 1100);
   return isCorrect;
@@ -163,7 +183,7 @@ function showCorrect() {
   reviewMode = 1;
   var percentage = scoreLoadedQuestions();
   loadedQuestions.forEach(function (question) {
-    $("#label" + question.id + ".rad" + question.correct).css(
+    $(`label[for="question-${question.id}-answer-${question.correct}"]`).css(
       "background-color",
       "#C6FF8C",
     );
@@ -315,6 +335,7 @@ $(document).ready(function () {
     initializeMonthDropdown($("#evszam").val());
     $("#honap").val("all");
   });
+  $("#honap").change(initializeQuestionDropdown);
 
   $("#mec").change(function () {
     var isChecked = this.checked;
@@ -337,6 +358,9 @@ $(document).ready(function () {
   });
   $("#berettsegi").click(function (event) {
     ajaxLoad(2);
+  });
+  $("#numberof").on("input", function () {
+    this.setCustomValidity("");
   });
   $("#load").click(function (event) {
     ajaxLoad(isSearch ? 1 : 3);

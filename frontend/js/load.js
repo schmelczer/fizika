@@ -100,29 +100,25 @@ const loadQuestions = async (
     ({ id, source, description, a, b, c, d, image }, i) => {
       const qid = Number(id);
       const safeImage = image ? encodeURIComponent(image) : "";
+      const answersHtml = [a, b, c, ...(d ? [d] : [])]
+        .map((answer, answerIndex) => {
+          const answerNumber = answerIndex + 1;
+          const answerId = `question-${qid}-answer-${answerNumber}`;
+          return `
+          <input type="radio" id="${answerId}" name="question-${qid}" value="${answerNumber}">
+          <label for="${answerId}">${sanitizeQuestionHtml(answer)}</label>
+          <br>`;
+        })
+        .join("");
       resultHtml += `
       <div class="feladat card" id="feladat${qid}">
         <h2 style="float: left;">${i + 1}.</h2><h2>${sanitizeQuestionHtml(source)}</h2>
-        <pre>${sanitizeQuestionHtml(description)}</pre>
-        ${image ? `<img src="${API_BASE}/api/pics/${safeImage}" crossorigin="anonymous" onerror="this.onerror=null; this.src='pics/${safeImage}'"><br>` : ""}
         <form id="form${qid}">
-          <input type="radio" id="rad1" name="group">
-          <label id="label${qid}" class="rad1">${sanitizeQuestionHtml(a)}</label>
-          <br>
-          <input type="radio" id="rad2" name="group">
-          <label id="label${qid}" class="rad2">${sanitizeQuestionHtml(b)}</label>
-          <br>
-          <input type="radio" id="rad3" name="group">
-          <label id="label${qid}" class="rad3">${sanitizeQuestionHtml(c)}</label>
-          <br>
-          ${
-            d
-              ? `
-          <input type="radio" id="rad4" name="group">
-          <label id="label${qid}" class="rad4">${sanitizeQuestionHtml(d)}</label>
-          <br>`
-              : ""
-          }
+          <fieldset>
+            <legend>${sanitizeQuestionHtml(description)}</legend>
+            ${image ? `<img src="${API_BASE}/api/pics/${safeImage}" crossorigin="anonymous" onerror="this.onerror=null; this.src='pics/${safeImage}'"><br>` : ""}
+            <div class="answers">${answersHtml}</div>
+          </fieldset>
         </form>
       </div>
       `;
@@ -281,6 +277,45 @@ const initializeMonthDropdown = (selectedYear) => {
   }
 
   monthDropdown.innerHTML = monthOptions;
+  initializeQuestionDropdown();
+};
+
+// Offer only imported question numbers matching the selected year and paper.
+// With an "all" filter, use the union across the matching papers.
+const initializeQuestionDropdown = () => {
+  if (!questions) return;
+
+  const questionDropdown = document.getElementById("feladat");
+  if (!questionDropdown) return;
+
+  const selectedYear = document.getElementById("evszam").value;
+  const selectedPaper = document.getElementById("honap").value;
+  const previousQuestion = questionDropdown.value;
+  const questionNumbers = new Set();
+
+  questions.forEach(({ source }) => {
+    const match = source.match(/^(\d{4})\/([^/\s]+)\/([1-9]\d*)$/);
+    if (
+      match &&
+      (selectedYear === "all/" || selectedYear === `${match[1]}/`) &&
+      (selectedPaper === "all" || selectedPaper === match[2]) &&
+      Number.isSafeInteger(Number(match[3]))
+    ) {
+      questionNumbers.add(Number(match[3]));
+    }
+  });
+
+  const numberOptions = [...questionNumbers]
+    .sort((a, b) => a - b)
+    .map((number) => `<option value="/${number}">${number}. feladat</option>`)
+    .join("");
+  questionDropdown.innerHTML =
+    '<option value="/all">Összes feladat</option>' + numberOptions;
+
+  // Retain a still-valid selection; clear it when the new paper lacks it.
+  if (questionNumbers.has(Number(previousQuestion.slice(1)))) {
+    questionDropdown.value = previousQuestion;
+  }
 };
 
 // Helper function to get readable month labels
@@ -288,6 +323,7 @@ const getMonthLabel = (monthValue) => {
   // Handle known patterns
   const knownLabels = {
     1: "Május-Június",
+    "1ma": "Május-Június (magyar, mint idegen nyelv)",
     2: "Október-November",
     3: "Harmadik időszak",
     m1: "1. Mintafeladatsor",

@@ -15,6 +15,7 @@ process.env.DATA_PATH = dataPath;
 process.env.PICS_PATH = picsPath;
 
 const { app, isUnsafeFilename } = require("./server");
+const { validateQuestionBank } = require("./validate-question-bank");
 
 const seedQuestions = [
   {
@@ -105,6 +106,61 @@ test("PUT updates an existing question", async () => {
   assert.equal(updated.description, "updated");
   // unchanged fields are preserved
   assert.equal(updated.source, "2016/m1/1");
+});
+
+test("POST rejects a duplicate source without changing the bank", async () => {
+  const before = fs.readFileSync(dataPath, "utf8");
+  const res = await sendJson("/api/admin/questions", "POST", seedQuestions[0]);
+  assert.equal(res.status, 409);
+  assert.equal((await res.json()).error, "Source identifier already exists");
+  assert.equal(fs.readFileSync(dataPath, "utf8"), before);
+});
+
+test("PUT rejects another question's source without changing the bank", async () => {
+  const before = fs.readFileSync(dataPath, "utf8");
+  const res = await sendJson("/api/admin/questions/2", "PUT", {
+    source: seedQuestions[0].source,
+    description: "must not be saved",
+  });
+  assert.equal(res.status, 409);
+  assert.equal((await res.json()).error, "Source identifier already exists");
+  assert.equal(fs.readFileSync(dataPath, "utf8"), before);
+});
+
+test("PUT allows a question to keep its own source", async () => {
+  const res = await sendJson("/api/admin/questions/1", "PUT", {
+    source: seedQuestions[0].source,
+    description: "updated",
+  });
+  assert.equal(res.status, 200);
+  assert.equal((await res.json()).description, "updated");
+});
+
+test("correcting October 2025 question 6 leaves exactly one result for 5 and 6", async () => {
+  const questions = Array.from({ length: 15 }, (_, i) => ({
+    ...seedQuestions[0],
+    id: 683 + i,
+    source: `2025/2/${i + 1}`,
+  }));
+  questions[5].source = "2025/2/5";
+  questions[5].image = "202526.JPG";
+  fs.writeFileSync(dataPath, JSON.stringify(questions, null, 2));
+
+  const res = await sendJson("/api/admin/questions/688", "PUT", {
+    source: "2025/2/6",
+  });
+  assert.equal(res.status, 200);
+  const bank = await (await api("/api/fizika")).json();
+  assert.deepEqual(
+    bank.filter((q) => q.source === "2025/2/5").map((q) => q.id),
+    [687],
+  );
+  assert.deepEqual(
+    bank.filter((q) => q.source === "2025/2/6").map((q) => q.id),
+    [688],
+  );
+  assert.equal(bank.find((q) => q.id === 688).image, "202526.JPG");
+  assert.deepEqual(validateQuestionBank(bank), []);
 });
 
 test("PUT returns 404 for a missing question", async () => {

@@ -12,6 +12,7 @@ input[type="radio"] {
   opacity: 0;
 }
 input[type="radio"] + label {
+  cursor: pointer;
   display: inline;
   font-family: "Open Sans", sans-serif;
   font-weight: 300;
@@ -29,12 +30,12 @@ input[type="radio"]:checked + label {
 }
 
 @media only screen and (max-width: 1000px) {
-  .card form {
+  .card .answers {
     display: grid;
     grid-template-columns: 28px minmax(0, 1fr);
     gap: 0.75em 0.5em;
   }
-  .card form br {
+  .card .answers br {
     display: none;
   }
   input[type="radio"] {
