@@ -71,9 +71,11 @@ const loadQuestions = async (
   let currentQuestions = questions.slice();
 
   if (isSearch) {
-    currentQuestions = currentQuestions.filter((q) =>
-      q.source.match(sourceScheme),
-    );
+    currentQuestions = currentQuestions
+      .filter((q) => q.source.match(sourceScheme))
+      .sort((a, b) =>
+        a.source.localeCompare(b.source, "hu", { numeric: true }),
+      );
   } else {
     shuffleArray(currentQuestions);
     currentQuestions = currentQuestions.filter((q) =>
