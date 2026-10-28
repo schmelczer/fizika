@@ -141,8 +141,9 @@ async function ajaxLoad(type) {
 // its correct answer, and report whether they got it right.
 function gradeQuestion(question) {
   var div = "#feladat" + question.id;
-  var selected = `#question-${question.id}-answer-${question.correct}`;
-  var isCorrect = $(selected).is(":checked");
+  var isCorrect = getAcceptedAnswers(question).some(function (answer) {
+    return $(`#question-${question.id}-answer-${answer}`).is(":checked");
+  });
   $(div).animate({ backgroundColor: isCorrect ? "#C6FF8C" : "#FF808C" }, 1100);
   return isCorrect;
 }
@@ -183,10 +184,12 @@ function showCorrect() {
   reviewMode = 1;
   var percentage = scoreLoadedQuestions();
   loadedQuestions.forEach(function (question) {
-    $(`label[for="question-${question.id}-answer-${question.correct}"]`).css(
-      "background-color",
-      "#C6FF8C",
-    );
+    getAcceptedAnswers(question).forEach(function (answer) {
+      $(`label[for="question-${question.id}-answer-${answer}"]`).css(
+        "background-color",
+        "#C6FF8C",
+      );
+    });
   });
   $("#percentage").html("Eredmény: " + percentage + "%");
   $("#state").html("Helyes válaszok bejelölve!");

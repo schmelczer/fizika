@@ -5,6 +5,10 @@ const QUESTION_COUNT_ERROR = `A feladatok mennyisége 1 és ${MAX_TOPIC_QUESTION
 const isValidQuestionCount = (count) =>
   Number.isInteger(count) && count >= 1 && count <= MAX_TOPIC_QUESTIONS;
 
+// Some official keys accept several choices, including withdrawn questions.
+const getAcceptedAnswers = (question) =>
+  (question.acceptedAnswers || [question.correct]).map(Number);
+
 // Auto-detect API base URL
 const getApiBase = () => {
   const protocol = window.location.protocol;
@@ -91,9 +95,10 @@ const loadQuestions = async (
   // click handler; those were never removed, so they piled up across loads and
   // ended up grading stale (already-removed) questions, saving bogus 0%
   // results over the user's history.
-  loadedQuestions = currentQuestions.map(({ id, correct }) => ({
-    id: Number(id),
-    correct: Number(correct),
+  loadedQuestions = currentQuestions.map((question) => ({
+    id: Number(question.id),
+    correct: Number(question.correct),
+    acceptedAnswers: getAcceptedAnswers(question),
   }));
   totalPoints = loadedQuestions.length;
 
@@ -326,6 +331,7 @@ const getMonthLabel = (monthValue) => {
   const knownLabels = {
     1: "Május-Június",
     "1ma": "Május-Június (magyar, mint idegen nyelv)",
+    "2ma": "Május-Június (idegen nyelvű vizsga magyar változata)",
     2: "Október-November",
     3: "Harmadik időszak",
     m1: "1. Mintafeladatsor",
