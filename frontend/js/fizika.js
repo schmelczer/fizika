@@ -4,6 +4,10 @@ var loadedQuestions = [];
 var timer = 0;
 var startTimer = 0;
 var reviewMode = 0;
+var isLocal = true;
+var numberOfPreviousTests = 1;
+const HISTORY_UNAVAILABLE =
+  "Az előzmények nem érhetők el, és az eredményeid nem kerülnek mentésre, mert a böngésző tárhelye nem használható. A teszteket továbbra is megoldhatod.";
 
 function aspect() {
   if ($(window).width() > $(window).height()) {
@@ -170,7 +174,7 @@ function evaluate() {
   $("#percentage").html("Eredmény: " + percentage + "%");
   $("#state").html("Válaszok leellenőrizve!");
 
-  if (isLocal && !reviewMode) {
+  if (!reviewMode) {
     saveResult(percentage);
     reviewMode = 1;
   }
@@ -200,80 +204,92 @@ function showCorrect() {
 }
 
 function saveResult(percentage) {
-  var datum = new Date();
   var ido = Math.round(timer / 60);
-  localStorage["teszt" + numberOfPreviousTests] = percentage;
-  localStorage["teszt" + numberOfPreviousTests + "date"] =
-    datum.toLocaleDateString();
-  localStorage["teszt" + numberOfPreviousTests + "time"] = ido;
-  localStorage["teszt" + numberOfPreviousTests + "total"] = totalPoints;
   startTimer = 0;
   timer = 0;
-  $("#state2").show();
-  $("#state2").html(
-    "Eredményed mentésre került! Ellenőrző módba belépve az eredményeid nem kerülnek tárolásra. A módból való kilépéshez tölts be egy új tesztsort!",
-  );
+
+  if (isLocal) {
+    try {
+      var storage = window.localStorage;
+      howMany(storage);
+      var key = "teszt" + numberOfPreviousTests;
+      storage.setItem(key + "date", new Date().toLocaleDateString());
+      storage.setItem(key + "time", ido);
+      storage.setItem(key + "total", totalPoints);
+      // The score marks a complete result; write it only after its metadata.
+      storage.setItem(key, percentage);
+    } catch {
+      disableHistory();
+    }
+  }
+
   eredmeny();
+  $("#state2").show();
+  $("#state2").text(
+    isLocal
+      ? "Eredményed mentésre került! Ellenőrző módba belépve az eredményeid nem kerülnek tárolásra. A módból való kilépéshez tölts be egy új tesztsort!"
+      : HISTORY_UNAVAILABLE,
+  );
 }
 
-function howMany() {
-  var localString = "localStorage.teszt";
+// Call only within a guarded storage operation.
+function howMany(storage) {
   numberOfPreviousTests = 1; //number of previous tests+1
-  localString += numberOfPreviousTests;
-  while (typeof eval(localString) !== "undefined") {
+  while (storage.getItem("teszt" + numberOfPreviousTests) !== null) {
     numberOfPreviousTests++;
-    localString = "localStorage.teszt" + numberOfPreviousTests;
   }
 }
 
+function disableHistory() {
+  isLocal = false;
+  $("#info").text(HISTORY_UNAVAILABLE);
+  $("#tablazat").empty();
+}
+
 function eredmeny() {
-  howMany();
-  if (isLocal) {
-    if (typeof localStorage.teszt1 !== "undefined") {
+  if (!isLocal) {
+    disableHistory();
+    return;
+  }
+
+  try {
+    var storage = window.localStorage;
+    howMany(storage);
+    if (numberOfPreviousTests > 1) {
+      $("#info").empty();
       $("#tablazat").html(
         '<table id="ered"><tr><th></th><th>Dátum</th><th>Időtartam</th><th>Eredmény</th><th>Pontszám</th></tr></table>',
       );
       for (var i = 1; i < numberOfPreviousTests; i++) {
-        var localString = "localStorage.teszt" + i;
-        var datumString = localString + "date";
-        var timeString = localString + "time";
-        var totalString = localString + "total";
-        var isGood = eval(localString);
+        var key = "teszt" + i;
+        var percentage = storage.getItem(key);
+        var datum = storage.getItem(key + "date");
+        var ido = storage.getItem(key + "time");
+        var total = storage.getItem(key + "total");
         $("#ered tr:last").after(
           "<tr><td>" +
             i +
             ".</td><td>" +
-            eval(datumString) +
+            datum +
             "</td><td>" +
-            eval(timeString) +
+            ido +
             " perc</td>" +
-            "<td style='color: hsl(" +
-            isGood +
-            ",100%,50%);''> <b>" +
-            eval(localString) +
+            "<td><b>" +
+            percentage +
             "%</b></td><td>" +
-            Math.round((eval(localString) * eval(totalString)) / 100) +
+            Math.round((percentage * total) / 100) +
             "/" +
-            eval(totalString) +
+            total +
             " pont</td></tr>",
         );
       }
     } else {
+      $("#tablazat").empty();
       $("#info").html("Még nincsenek elmentett eredményeid.");
     }
-  } else {
-    $("#tablazat").html(
-      "<h2>Sajnos a böngésződ nem támogatja ezt a funkciót, tölts le egy modernebbet vagy jelentkezz be!</h2>",
-    );
+  } catch {
+    disableHistory();
   }
-}
-
-//starting up
-if (typeof Storage !== "undefined") {
-  var isLocal = 1;
-  howMany();
-} else {
-  var isLocal = 0;
 }
 
 setInterval(function () {
